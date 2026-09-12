@@ -1,0 +1,710 @@
+\documentclass[a4paper,13pt]{article}
+
+% --- Tieng Viet + ma UTF-8 ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Bo cuc trang ---
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=2cm}
+
+% --- Code Python ---
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegray}{gray}{0.95}
+\definecolor{outgray}{gray}{0.92}
+\definecolor{pykeyword}{RGB}{0,0,180}
+\definecolor{pycomment}{RGB}{0,128,0}
+\definecolor{pystring}{RGB}{170,0,0}
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray},
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b,
+  keywordstyle=\color{pykeyword}\bfseries,
+  commentstyle=\color{pycomment}\itshape,
+  stringstyle=\color{pystring}
+}
+
+% --- Lien ket ---
+\usepackage{hyperref}
+
+\begin{document}
+
+% ================= TRANG BIA =================
+\begin{center}
+\large TRƯỜNG ĐẠI HỌC SÀI GÒN \\
+\large KHOA TOÁN -- ỨNG DỤNG \\[0.3cm]
+\rule{12cm}{1.5pt} \\[0.8cm]
+
+\Large \textbf{BÁO CÁO BÀI THỰC HÀNH} \\[0.4cm]
+\large Môn: Học sâu (Deep Learning) \\
+\Large \textbf{Bài 1: Làm quen với PyTorch} \\[1.2cm]
+
+\begin{tabular}{ll}
+Họ và tên: & \textbf{Đinh Quang Minh} \\
+MSSV: & \textbf{3123580024} \\
+Lớp: & DDU1231 \\
+Ngành: & Khoa học dữ liệu \\
+Giảng viên hướng dẫn: & TS. Đỗ Như Tài \\
+Học kỳ: & Học kỳ I, năm học 2026 \\
+\end{tabular}\\[1.5cm]
+
+TP. Hồ Chí Minh, tháng 9 năm 2026 \\
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ================= 1. GIOI THIEU =================
+\newpage
+\section{Giới thiệu}
+
+\subsection{Mục tiêu}
+Sau khi hoàn thành bài thực hành, sinh viên có thể:
+\begin{itemize}
+  \item Tạo, kiểm tra và thao tác với Tensor trong PyTorch.
+  \item Thực hiện indexing, slicing, reshape và các phép toán ma trận trên Tensor.
+  \item Sử dụng các hàm thống kê cơ bản trên Tensor.
+  \item Hiểu cơ chế automatic differentiation (autograd) và vai trò của gradient.
+  \item Sử dụng optimizer để giải bài toán tối ưu đơn giản bằng Gradient Descent.
+\end{itemize}
+
+\subsection{Môi trường thực hành}
+Báo cáo này được thực hiện và kiểm chứng trên môi trường:
+\begin{itemize}
+  \item Python 3.12, PyTorch 2.14.0+cpu (chỉ dùng CPU), NumPy 2.5.3, Jupyter.
+  \item File thực hành: \texttt{Lab01/lab01.ipynb} (đã chạy toàn bộ, không lỗi).
+\end{itemize}
+\begin{lstlisting}[language=Python]
+import torch
+import numpy as np
+print("torch:", torch.__version__)
+print("cuda available:", torch.cuda.is_available())
+\end{lstlisting}
+Kết quả:
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+torch: 2.14.0+cpu
+cuda available: False
+\end{lstlisting}
+
+% ================= BAI 1 =================
+\newpage
+\section{Bài 1. Tạo Tensor cơ bản}
+
+\subsection{Yêu cầu}
+Tạo một Tensor số nguyên kích thước $2 \times 3$ và cho biết kích thước, số chiều, kiểu dữ liệu.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+
+a = torch.tensor(
+    [[1, 2, 3],
+     [4, 5, 6]],
+    dtype=torch.int32
+)
+print(a)
+print("Shape (kich thuoc):", a.shape)
+print("So chieu (ndim):", a.ndim)
+print("Kieu du lieu (dtype):", a.dtype)
+print("So phan tu (numel):", a.numel())
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+tensor([[1, 2, 3],
+        [4, 5, 6]], dtype=torch.int32)
+Shape (kich thuoc): torch.Size([2, 3])
+So chieu (ndim): 2
+Kieu du lieu (dtype): torch.int32
+So phan tu (numel): 6
+\end{lstlisting}
+
+\subsection{Nhận xét}
+Tensor \texttt{a} có shape $(2,3)$ (2 hàng, 3 cột), $ndim=2$ (ma trận), kiểu \texttt{torch.int32} (số nguyên 32-bit), tổng cộng 6 phần tử.
+
+% ================= BAI 2 =================
+\newpage
+\section{Bài 2. Tạo các Tensor thường dùng}
+
+\subsection{Yêu cầu}
+Tạo Tensor ngẫu nhiên, Tensor toàn số 0, toàn số 1, ma trận đơn vị; so sánh \texttt{torch.rand()} và \texttt{torch.randn()}; tạo thêm Tensor $5 \times 5$ toàn giá trị 10.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+a = torch.rand(3, 4)
+b = torch.randn(3, 4)
+c = torch.zeros(2, 3)
+d = torch.ones(2, 3)
+e = torch.eye(4)
+print(a); print(b); print(c); print(d); print(e)
+
+f = torch.full((5, 5), 10)
+print(f)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+a = torch.rand(3, 4):
+tensor([[0.4963, 0.7682, 0.0885, 0.1320],
+        [0.3074, 0.6341, 0.4901, 0.8964],
+        [0.4556, 0.6323, 0.3489, 0.4017]])
+
+b = torch.randn(3, 4):
+tensor([[ 0.4033,  0.8380, -0.7193, -0.4033],
+        [-0.5966,  0.1820, -0.8567,  1.1006],
+        [-1.0712,  0.1227, -0.5663,  0.3731]])
+
+c = torch.zeros(2, 3):
+tensor([[0., 0., 0.],
+        [0., 0., 0.]])
+
+d = torch.ones(2, 3):
+tensor([[1., 1., 1.],
+        [1., 1., 1.]])
+
+e = torch.eye(4):
+tensor([[1., 0., 0., 0.],
+        [0., 1., 0., 0.],
+        [0., 0., 1., 0.],
+        [0., 0., 0., 1.]])
+
+f = Tensor 5x5 toan gia tri 10:
+tensor([[10, 10, 10, 10, 10],
+        [10, 10, 10, 10, 10],
+        [10, 10, 10, 10, 10],
+        [10, 10, 10, 10, 10],
+        [10, 10, 10, 10, 10]])
+\end{lstlisting}
+
+\subsection{Nhận xét}
+\texttt{torch.rand()} sinh phân phối đều trên $[0,1)$ (giá trị luôn không âm, nhỏ hơn 1), còn \texttt{torch.randn()} sinh phân phối chuẩn $\mathcal{N}(0,1)$ (có giá trị âm/dương, thường trong $[-3,3]$). \texttt{torch.full((5,5),10)} tạo Tensor hằng như yêu cầu.
+
+% ================= BAI 3 =================
+\newpage
+\section{Bài 3. Kiểm tra thông tin Tensor}
+
+\subsection{Yêu cầu}
+Dùng \texttt{shape}, \texttt{size()}, \texttt{ndim}, \texttt{dtype} kiểm tra thuộc tính Tensor và giải thích \texttt{torch.Size([2, 3, 4])}.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+
+a = torch.zeros(2, 3, 4)
+print(a)
+print("Shape:", a.shape)
+print("Size:", a.size())
+print("Number of dimensions:", a.ndim)
+print("Data type:", a.dtype)
+print("So phan tu:", a.numel())
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+Tensor:
+tensor([[[0., 0., 0., 0.],
+         [0., 0., 0., 0.],
+         [0., 0., 0., 0.]],
+        [[0., 0., 0., 0.],
+         [0., 0., 0., 0.],
+         [0., 0., 0., 0.]]])
+Shape: torch.Size([2, 3, 4])
+Size: torch.Size([2, 3, 4])
+Number of dimensions: 3
+Data type: torch.float32
+So phan tu: 24
+\end{lstlisting}
+
+\subsection{Nhận xét}
+\texttt{torch.Size([2,3,4])} nghĩa là Tensor 3 chiều: chiều 0 dài 2 (2 khối), chiều 1 dài 3 (3 hàng mỗi khối), chiều 2 dài 4 (4 cột mỗi hàng); tổng $2 \times 3 \times 4 = 24$ phần tử. \texttt{shape} và \texttt{size()} cho cùng giá trị.
+
+% ================= BAI 4 =================
+\newpage
+\section{Bài 4. Slicing và Indexing}
+
+\subsection{Yêu cầu}
+Cho biết shape của \texttt{a[1]} và \texttt{a[1:, 2:4]}; lấy hai phần tử cuối cùng trên chiều thứ ba.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+a = torch.randn(3, 4, 5)
+print(a)
+print("shape cua a:", a.shape)
+print(a[1])
+print("shape cua a[1]:", a[1].shape)
+print(a[1:, 2:4])
+print("shape cua a[1:, 2:4]:", a[1:, 2:4].shape)
+
+last_two = a[:, :, -2:]
+print(last_two)
+print("shape:", last_two.shape)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+shape cua a: torch.Size([3, 4, 5])
+shape cua a[1]: torch.Size([4, 5])
+shape cua a[1:, 2:4]: torch.Size([2, 2, 5])
+
+Hai phan tu cuoi tren chieu thu ba a[:, :, -2:]:
+tensor([[[-0.4339,  0.8487],
+         [ 0.3223, -1.2633],
+         [ 1.2377,  1.1168],
+         [ 0.5667,  0.7935]],
+        [[ 1.8530,  0.7502],
+         [ 1.3894,  1.5863],
+         [ 0.0316, -0.4927],
+         [ 0.6408,  0.4412]],
+        [[ 0.0525,  0.5943],
+         [-0.5692,  0.9200],
+         [-0.1938,  0.4455],
+         [-0.4798, -0.4997]]])
+shape: torch.Size([3, 4, 2])
+\end{lstlisting}
+
+\subsection{Nhận xét}
+\texttt{a[1]} cố định chiều 0 nên mất một chiều, còn shape $(4,5)$. \texttt{a[1:, 2:4]} giữ cả ba chiều với shape $(2,2,5)$. Cú pháp \texttt{a[:, :, -2:]} lấy hai phần tử cuối trên chiều thứ ba, cho shape $(3,4,2)$.
+
+% ================= BAI 5 =================
+\newpage
+\section{Bài 5. Reshape và Flatten}
+
+\subsection{Yêu cầu}
+Kiểm tra số phần tử trước/sau reshape; reshape thành $2 \times 6$.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+a = torch.randn(3, 4)
+print(a)
+print(a.ravel())
+b = a.reshape(3, 2, 2)
+print(b)
+c = a.reshape(2, 6)
+print(c)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+Original:
+tensor([[ 1.5410, -0.2934, -2.1788,  0.5684],
+        [-1.0845, -1.3986,  0.4033,  0.8380],
+        [-0.7193, -0.4033, -0.5966,  0.1820]])
+shape: torch.Size([3, 4]) | numel: 12
+
+Flatten:
+tensor([ 1.5410, -0.2934, -2.1788,  0.5684, -1.0845, -1.3986,  0.4033,  0.8380,
+        -0.7193, -0.4033, -0.5966,  0.1820])
+shape flatten: torch.Size([12])
+
+Reshape to 3 x 2 x 2:
+tensor([[[ 1.5410, -0.2934],
+         [-2.1788,  0.5684]],
+        [[-1.0845, -1.3986],
+         [ 0.4033,  0.8380]],
+        [[-0.7193, -0.4033],
+         [-0.5966,  0.1820]]])
+shape: torch.Size([3, 2, 2]) | numel: 12
+
+Reshape to 2 x 6:
+tensor([[ 1.5410, -0.2934, -2.1788,  0.5684, -1.0845, -1.3986],
+        [ 0.4033,  0.8380, -0.7193, -0.4033, -0.5966,  0.1820]])
+shape: torch.Size([2, 6]) | numel: 12
+\end{lstlisting}
+
+\subsection{Nhận xét}
+Mọi phép reshape đều giữ nguyên 12 phần tử; điều kiện hợp lệ là tích các kích thước mới bằng \texttt{numel} gốc. \texttt{ravel()} trải phẳng Tensor thành vector.
+
+% ================= BAI 6 =================
+\newpage
+\section{Bài 6. Phép toán và nhân ma trận}
+
+\subsection{Yêu cầu}
+Phân biệt \texttt{a * b} với \texttt{a @ b.T}; cho biết shape của \texttt{a @ b.T}.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+a = torch.randn(2, 3)
+b = torch.randn(2, 3)
+print(a + b)
+print(a / b)
+print(a ** 2)
+print(a * b)
+print(a @ b.T)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+a + b:
+tensor([[ 1.9443,  0.5446, -2.8980],
+        [ 0.1651, -1.6812, -1.2166]])
+
+a / b:
+tensor([[ 3.8205, -0.3501,  3.0292],
+        [-1.4093,  1.8177, -7.6831]])
+
+a^2:
+tensor([[2.3747, 0.0861, 4.7471],
+        [0.3231, 1.1762, 1.9561]])
+
+a * b (nhan tung phan tu):
+tensor([[ 0.6216, -0.2459,  1.5671],
+        [-0.2293,  0.6471, -0.2546]])
+shape: torch.Size([2, 3])
+
+Matrix multiplication a @ b.T:
+tensor([[ 1.9428, -0.8431],
+        [ 0.3264,  0.1632]])
+shape: torch.Size([2, 2])
+\end{lstlisting}
+
+\subsection{Nhận xét}
+\texttt{a * b} là nhân từng phần tử, giữ shape $(2,3)$. \texttt{a @ b.T} là nhân ma trận $(2 \times 3) \times (3 \times 2) \to (2,2)$; mỗi phần tử là tích vô hướng của một hàng \texttt{a} với một hàng \texttt{b}.
+
+% ================= BAI 7 =================
+\newpage
+\section{Bài 7. Các hàm thống kê trên Tensor}
+
+\subsection{Yêu cầu}
+Tính mean, std, cumsum theo cột (\texttt{dim=0}); thay bằng \texttt{dim=1} và nhận xét.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+a = torch.randn(3, 4)
+print(torch.mean(a, dim=0))
+print(torch.std(a, dim=0))
+print(torch.cumsum(a, dim=0))
+print(torch.mean(a, dim=1))
+print(torch.std(a, dim=1))
+print(torch.cumsum(a, dim=1))
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+Mean (dim=0, theo cot):
+tensor([-0.0876, -0.6985, -0.7907,  0.5295])
+
+Standard deviation (dim=0):
+tensor([1.4222, 0.6088, 1.3020, 0.3297])
+
+Cumulative sum (dim=0):
+tensor([[ 1.5410, -0.2934, -2.1788,  0.5684],
+        [ 0.4565, -1.6920, -1.7754,  1.4065],
+        [-0.2628, -2.0954, -2.3721,  1.5885]])
+
+Mean (dim=1):
+tensor([-0.0907, -0.3104, -0.3843])
+
+Standard deviation (dim=1):
+tensor([1.5809, 1.0972, 0.3993])
+
+Cumulative sum (dim=1):
+tensor([[ 1.5410,  1.2476, -0.9312, -0.3628],
+        [-1.0845, -2.4831, -2.0798, -1.2417],
+        [-0.7193, -1.1226, -1.7192, -1.5372]])
+\end{lstlisting}
+
+\subsection{Nhận xét}
+Với Tensor $(3,4)$: \texttt{dim=0} gom theo cột cho kết quả shape $(4,)$ và cộng dồn từ trên xuống; \texttt{dim=1} gom theo hàng cho kết quả shape $(3,)$ và cộng dồn từ trái sang phải. Quy tắc nhớ: \texttt{dim=k} là chiều bị triệt tiêu sau phép tính.
+
+% ================= BAI 8 =================
+\newpage
+\section{Bài 8. Autograd cơ bản}
+
+\subsection{Yêu cầu}
+Tính thủ công đạo hàm $y=x^2$ tại $x=3.6$ so với \texttt{x.grad}; đổi sang $y=3x^2+2x+1$ và kiểm tra.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import torch
+
+x = torch.tensor(3.6, requires_grad=True)
+y = x * x
+y.backward()
+print("x =", x)
+print("y =", y)
+print("x.grad =", x.grad)
+
+x2 = torch.tensor(3.6, requires_grad=True)
+y2 = 3*x2**2 + 2*x2 + 1
+y2.backward()
+print("y2 =", y2.item())
+print("x2.grad =", x2.grad.item())
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+x = tensor(3.6000, requires_grad=True)
+y = tensor(12.9600, grad_fn=<MulBackward0>)
+x.grad = tensor(7.2000)
+Tinh thu cong dy/dx = 2*3.6 = 7.2
+
+Voi y = 3*x**2 + 2*x + 1 tai x=3.6:
+y2 = 47.07999801635742
+x2.grad (autograd) = 23.599998474121094
+Tinh thu cong dy/dx = 6x+2 = 23.6
+\end{lstlisting}
+
+\subsection{Nhận xét}
+$y=x^2 \Rightarrow dy/dx=2x=7.2$; $y=3x^2+2x+1 \Rightarrow dy/dx=6x+2=23.6$, đều khớp với autograd (sai số float không đáng kể). \texttt{requires\_grad=True} yêu cầu PyTorch lưu đồ thị tính toán, \texttt{backward()} lan truyền ngược tính gradient.
+
+% ================= BAI 9 =================
+\newpage
+\section{Bài 9. Gradient Descent tìm hệ số đa thức}
+
+\subsection{Yêu cầu}
+Sinh dữ liệu từ $y=x^2+2x+3$, dùng NAdam tìm lại ba hệ số; giải thích \texttt{zero\_grad()}, \texttt{backward()}, \texttt{step()}.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import numpy as np
+import torch
+np.random.seed(0)
+torch.manual_seed(0)
+
+polynomial = np.poly1d([1, 2, 3])
+X = np.random.randn(20, 1) * 5
+Y = polynomial(X)
+XX = np.hstack([X*X, X, np.ones_like(X)])
+
+w = torch.randn(3, 1, requires_grad=True)
+x = torch.tensor(XX, dtype=torch.float32)
+y = torch.tensor(Y, dtype=torch.float32)
+optimizer = torch.optim.NAdam([w], lr=0.01)
+
+for epoch in range(1000):
+    optimizer.zero_grad()
+    y_pred = x @ w
+    mse = torch.mean(torch.square(y - y_pred))
+    mse.backward()
+    optimizer.step()
+print(w)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+Initial coefficients:
+tensor([[ 1.5410],
+        [-0.2934],
+        [-2.1788]], requires_grad=True)
+
+Learned coefficients:
+tensor([[1.0017],
+        [2.0058],
+        [2.8337]], requires_grad=True)
+He so thuc: [1, 2, 3]
+\end{lstlisting}
+
+\subsection{Nhận xét}
+Hệ số học được xấp xỉ $[1, 2, 3]$, khôi phục đúng đa thức sinh dữ liệu. Vai trò ba lệnh: \texttt{zero\_grad()} xóa gradient cũ (PyTorch cộng dồn gradient), \texttt{mse.backward()} tính gradient loss theo \texttt{w}, \texttt{optimizer.step()} cập nhật \texttt{w} ngược hướng gradient (NAdam là Gradient Descent có momentum và learning rate thích nghi).
+
+% ================= BAI 10 =================
+\newpage
+\section{Bài 10. Giải hệ phương trình bằng Autograd}
+
+\subsection{Yêu cầu}
+Kiểm tra nghiệm với $A+B=9,\ C-D=1,\ A+C=8,\ B-D=2$; nhận xét vì sao nhiều nghiệm.
+
+\subsection{Code}
+\begin{lstlisting}[language=Python]
+import random
+import torch
+random.seed(0)
+torch.manual_seed(0)
+
+A = torch.tensor(random.random(), requires_grad=True)
+B = torch.tensor(random.random(), requires_grad=True)
+C = torch.tensor(random.random(), requires_grad=True)
+D = torch.tensor(random.random(), requires_grad=True)
+optimizer = torch.optim.NAdam([A, B, C, D], lr=0.01)
+
+for _ in range(2000):
+    y1 = A + B - 9
+    y2 = C - D - 1
+    y3 = A + C - 8
+    y4 = B - D - 2
+    sqerr = y1*y1 + y2*y2 + y3*y3 + y4*y4
+    optimizer.zero_grad()
+    sqerr.backward()
+    optimizer.step()
+print("A =", A)
+print("B =", B)
+print("C =", C)
+print("D =", D)
+\end{lstlisting}
+
+\subsection{Kết quả chạy}
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+A = tensor(4.5494, requires_grad=True)
+B = tensor(4.4506, requires_grad=True)
+C = tensor(3.4506, requires_grad=True)
+D = tensor(2.4506, requires_grad=True)
+
+Kiem tra:
+A+B = 9.0000 (mong doi 9)
+C-D = 1.0000 (mong doi 1)
+A+C = 8.0000 (mong doi 8)
+B-D = 2.0000 (mong doi 2)
+\end{lstlisting}
+
+\subsection{Nhận xét}
+Nghiệm thỏa cả bốn phương trình với sai số $\approx 0$. Hệ có vô số nghiệm vì bốn phương trình phụ thuộc tuyến tính: $(A+B)-(A+C)+(C-D)-(B-D) \equiv 0$ với mọi $A,B,C,D$ nên hạng của hệ nhỏ hơn 4 (một bậc tự do). Gradient descent hội tụ về một nghiệm gần điểm khởi tạo ngẫu nhiên.
+
+% ================= BAI 11 =================
+\newpage
+\section{Bài 11. Bài tập áp dụng}
+
+\subsection{11.1. Reshape Tensor 24 phần tử}
+\begin{lstlisting}[language=Python]
+import torch
+
+X = torch.arange(24)
+X_4x6 = X.reshape(4, 6)
+X_2x12 = X.reshape(2, 12)
+X_2x3x4 = X.reshape(2, 3, 4)
+print(X_4x6)
+print(X_2x12)
+print(X_2x3x4)
+\end{lstlisting}
+Kết quả:
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+4x6:
+tensor([[ 0,  1,  2,  3,  4,  5],
+        [ 6,  7,  8,  9, 10, 11],
+        [12, 13, 14, 15, 16, 17],
+        [18, 19, 20, 21, 22, 23]])
+
+2x12:
+tensor([[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11],
+        [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])
+
+2x3x4:
+tensor([[[ 0,  1,  2,  3],
+         [ 4,  5,  6,  7],
+         [ 8,  9, 10, 11]],
+        [[12, 13, 14, 15],
+         [16, 17, 18, 19],
+         [20, 21, 22, 23]]])
+\end{lstlisting}
+
+\subsection{11.2. Phép toán và thống kê theo cột}
+\begin{lstlisting}[language=Python]
+import torch
+torch.manual_seed(0)
+
+A = torch.randn(3, 4)
+B = torch.randn(3, 4)
+print(A + B)
+print(A * B)
+print(A / B)
+print(torch.mean(A, dim=0))
+print(torch.std(A, dim=0))
+\end{lstlisting}
+Kết quả:
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+A+B:
+tensor([[ 0.6843,  0.8072, -3.2500,  0.6911],
+        [-1.6508, -1.0255, -0.4886, -0.6711],
+        [-0.3489,  1.0532,  0.3432,  0.9569]])
+
+A*B (element-wise):
+tensor([[-1.3201, -0.3229,  2.3339,  0.0697],
+        [ 0.6142, -0.5218, -0.3598, -1.2647],
+        [-0.2664, -0.5875, -0.5607,  0.1411]])
+
+A/B:
+tensor([[-1.7988, -0.2666,  2.0340,  4.6326],
+        [ 1.9150, -3.7484, -0.4522, -0.5553],
+        [-1.9419, -0.2769, -0.6348,  0.2349]])
+
+Trung binh theo cot (dim=0):
+tensor([-0.0876, -0.6985, -0.7907,  0.5295])
+
+Do lech chuan theo cot (dim=0):
+tensor([1.4222, 0.6088, 1.3020, 0.3297])
+\end{lstlisting}
+
+\subsection{11.3. Autograd với $y=2x^2+5x+3$ tại $x=2$}
+\begin{lstlisting}[language=Python]
+import torch
+
+x = torch.tensor(2.0, requires_grad=True)
+y = 2*x**2 + 5*x + 3
+y.backward()
+print("y =", y.item())
+print("dy/dx (autograd) =", x.grad.item())
+\end{lstlisting}
+Kết quả:
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+y = 21.0
+dy/dx (autograd) = 13.0
+Kiem tra thu cong: dy/dx = 4x+5 = 13
+\end{lstlisting}
+Nhận xét: $dy/dx=4x+5$, tại $x=2$ bằng 13, khớp với autograd.
+
+\subsection{11.4. Gradient Descent với $y=2x^2-3x+5$}
+Thay đa thức trong Bài 9 bằng $y=2x^2-3x+5$ và huấn luyện tương tự. Vì đặc trưng $x^2$ có thang đo lớn nên cần 5000 epoch (thay vì 1000) để hội tụ.
+\begin{lstlisting}[language=Python]
+import numpy as np
+import torch
+np.random.seed(1)
+torch.manual_seed(1)
+
+polynomial = np.poly1d([2, -3, 5])
+X = np.random.randn(20, 1) * 5
+Y = polynomial(X)
+XX = np.hstack([X*X, X, np.ones_like(X)])
+w = torch.randn(3, 1, requires_grad=True)
+x = torch.tensor(XX, dtype=torch.float32)
+y = torch.tensor(Y, dtype=torch.float32)
+optimizer = torch.optim.NAdam([w], lr=0.01)
+
+for epoch in range(5000):
+    optimizer.zero_grad()
+    y_pred = x @ w
+    mse = torch.mean(torch.square(y - y_pred))
+    mse.backward()
+    optimizer.step()
+print(w)
+\end{lstlisting}
+Kết quả:
+\begin{lstlisting}[backgroundcolor=\color{outgray}]
+Initial coefficients:
+tensor([[0.6614],
+        [0.2669],
+        [0.0617]], requires_grad=True)
+
+Learned coefficients (mong doi ~[2, -3, 5]):
+tensor([[ 2.0000],
+        [-3.0000],
+        [ 4.9998]], requires_grad=True)
+\end{lstlisting}
+Nhận xét: hệ số tìm được $[2.0, -3.0, 5.0]$, trùng với đa thức sinh dữ liệu. (Thử nghiệm cho thấy với 1000 epoch hệ số chặn mới đạt $\approx 2.44$; tăng lên 5000 epoch thì hội tụ hoàn toàn.)
+
+% ================= KET LUAN =================
+\newpage
+\section{Kết luận}
+Qua Bài 1, em đã nắm được cách tạo và thao tác Tensor, slicing/reshape, phép toán ma trận, hàm thống kê, cơ chế autograd và cách dùng optimizer (NAdam) để giải bài toán hồi quy và hệ phương trình bằng Gradient Descent. Toàn bộ code trong báo cáo đã được chạy kiểm chứng trên PyTorch 2.14 (CPU) và cho kết quả đúng như phân tích.
+
+\end{document}
