@@ -1,0 +1,80 @@
+\documentclass[a4paper,12pt]{article}
+
+% --- Tieng Viet + ma UTF-8 ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Bo cuc trang ---
+\usepackage{geometry}
+\geometry{top=2.2cm, bottom=2.2cm, left=2.5cm, right=2cm}
+
+% --- Toan ---
+\usepackage{amsmath}
+
+% --- Lien ket ---
+\usepackage{hyperref}
+
+\begin{document}
+
+% ================= TRANG BIA =================
+\begin{center}
+\large TRƯỜNG ĐẠI HỌC SÀI GÒN \\
+\large KHOA TOÁN -- ỨNG DỤNG \\[0.3cm]
+\rule{12cm}{1.5pt} \\[0.8cm]
+
+\Large \textbf{BÀI TẬP LÝ THUYẾT 01} \\[0.4cm]
+\large Môn: Học sâu (Deep Learning) \\
+\Large \textbf{Tóm tắt 2 bài báo} \\[1.2cm]
+
+\begin{tabular}{ll}
+Họ và tên: & \textbf{Đinh Quang Minh} \\
+MSSV: & \textbf{3123580024} \\
+Lớp: & DDU1231 \\
+Ngành: & Khoa học dữ liệu \\
+Giảng viên hướng dẫn: & TS. Đỗ Như Tài \\
+Học kỳ: & Học kỳ I, năm học 2026 \\
+\end{tabular}\\[1.5cm]
+
+TP. Hồ Chí Minh, tháng 9 năm 2026 \\
+\end{center}
+
+\newpage
+
+% ================= BAI 1 =================
+\section*{Bài 1. Deep learning (LeCun, Bengio \& Hinton, Nature 2015)}
+
+Bài tổng quan \textit{Deep learning} (Nature, tập 521, tr.~436--444) của Yann LeCun, Yoshua Bengio và Geoffrey Hinton trình bày các khái niệm, phương pháp và ứng dụng cốt lõi của học sâu.
+
+\textbf{Học biểu diễn (representation learning).} Học máy truyền thống cần chuyên gia thiết kế bộ trích đặc trưng biến dữ liệu thô (điểm ảnh) thành vector đặc trưng rồi mới phân loại. Học biểu diễn cho phép máy tự khám phá đặc trưng từ dữ liệu thô; học sâu là học biểu diễn nhiều tầng: mỗi mô-đun phi tuyến biến biểu diễn tầng dưới thành biểu diễn trừu tượng hơn ở tầng trên. Ví dụ với ảnh: tầng 1 phát hiện cạnh, tầng 2 phát hiện motif từ các cạnh, tầng 3 ghép thành bộ phận vật thể, các tầng sau nhận dạng vật thể. Các tầng đặc trưng này không do con người thiết kế mà được học từ dữ liệu.
+
+\textbf{Học có giám sát và SGD.} Dạng phổ biến nhất của học máy là học có giám sát: máy cho vector điểm theo từng lớp, hàm mục tiêu đo sai số so với đáp án, rồi điều chỉnh trọng số (weights) để giảm sai số theo hướng ngược gradient (steepest descent). Thực tế dùng \textit{stochastic gradient descent} (SGD) trên từng mini-batch cho ước lượng nhiễu của gradient trung bình; hiệu năng sau huấn luyện được đo trên tập kiểm tra (test set) để đánh giá khả năng tổng quát hóa.
+
+\textbf{Vì sao cần sâu?} Classifier tuyến tính chỉ cắt không gian bằng siêu phẳng, không phân biệt được các biến thể không liên quan (tư thế, ánh sáng) trong khi vẫn nhạy với chi tiết nhỏ (chó Samoyed và sói trắng). Đặc trưng tổng quát kiểu kernel Gaussian khó tổng quát xa dữ liệu huấn luyện, còn thiết kế đặc trưng tay tốn công sức. Mạng nhiều tầng phi tuyến (sâu 5--20 lớp) vừa nhạy với chi tiết vừa bất biến với nhiễu lớn --- đó là lợi thế then chốt của học sâu.
+
+\textbf{Lan truyền ngược (backpropagation).} Gradient của hàm mục tiêu theo trọng số được tính bằng quy tắc chuỗi (chain rule), lan truyền ngược từ tầng ra tới tầng vào; sau đó tính gradient theo từng trọng số. Hàm ReLU ($f(z)=\max(0,z)$) học nhanh hơn sigmoid/tanh ở mạng sâu. Cực tiểu địa phương kém hiếm khi là vấn đề với mạng lớn; khó khăn thực sự là các điểm yên ngựa (saddle points).
+
+\textbf{Mạng tích chập (CNN).} ConvNet xử lý dữ liệu dạng mảng (ảnh, tiếng nói, video) bằng bốn ý tưởng: kết nối cục bộ, chia sẻ trọng số (filter bank), pooling (thường là max-pooling tạo bất biến dịch chuyển nhỏ) và xếp chồng nhiều tầng. Năm 2012, mạng tích chập sâu thắng áp đảo cuộc thi ImageNet nhờ GPU, ReLU, dropout và tăng cường dữ liệu, mở ra cách mạng thị giác máy tính (nhận dạng, phát hiện, chú thích ảnh).
+
+\textbf{Biểu diễn phân tán và RNN.} Mỗi từ được mã hóa thành vector đặc trưng học được (word vectors): từ đồng nghĩa nằm gần nhau, cho phép tổng quát qua tổ hợp đặc trưng mới --- ưu thế hàm mũ so với mô hình N-gram. Mạng hồi quy (RNN) duy trì vector trạng thái theo thời gian, huấn luyện bằng cách trải mạng theo trục thời gian; biến thể LSTM/bộ nhớ ngoài khắc phục hiện tượng gradient tiêu biến/bùng nổ, tạo đột phá trong dịch máy (mô hình encoder--decoder) và sinh chú thích ảnh.
+
+\textbf{Thuở ban đầu và tương lai.} Tiền huấn luyện không giám sát bằng RBM từng giúp khởi tạo mạng sâu (2006), sau này chỉ còn cần với dữ liệu nhãn ít. Tác giả dự báo học không giám sát, kết hợp CNN+RNN với học tăng cường và cơ chế chú ý, cùng lập luận trên vector thay cho ký hiệu, là hướng phát triển tiếp theo.
+
+\newpage
+
+% ================= BAI 2 =================
+\section*{Bài 2. Nobel Vật lý 2024: Hopfield và Hinton (Scientific Background)}
+
+Tài liệu \textit{Scientific Background to the Nobel Prize in Physics 2024} của Viện Hàn lâm Khoa học Hoàng gia Thụy Điển vinh danh John J.~Hopfield và Geoffrey Hinton ``for foundational discoveries and inventions that enable machine learning with artificial neural networks''.
+
+\textbf{Lịch sử.} McCulloch và Pitts (1943) mô hình nơ-ron tính tổng có trọng số; Hebb (1949) đề xuất quy tắc học qua đồng kích hoạt; Rosenblatt (1957) xây perceptron (mạng tiến ba tầng) nhưng vấp ví dụ XOR phi tuyến; Minsky và Papert (1969) chỉ ra giới hạn này khiến tài trợ ANN chững lại. Hai họ kiến trúc song song phát triển: mạng hồi quy (recurrent, có phản hồi) và mạng tiến (feedforward).
+
+\textbf{Mạng Hopfield (1982).} Hopfield, nhà vật lý lý thuyết, xây mô hình động học cho bộ nhớ liên tưởng gồm $N$ nút nhị phân $s_i \in \{0,1\}$, cập nhật bất đồng bộ theo ngưỡng của tổng có trọng số $h_i=\sum_{j \ne i} w_{ij}s_j$ ($s_i=1$ nếu $h_i>0$), trọng số đối xứng theo luật Hebb. Hệ được gán năng lượng $E=-\sum_{i<j} w_{ij}s_is_j$ giảm đơn điệu theo động học, tương tự trường phân tử Weiss và năng lượng cấu hình từ trong vật lý. Hệ tiến về cực tiểu năng lượng gần nhất nên tự sửa mẫu sai (hoàn thiện pattern); dung lượng nhớ được lý giải bằng lý thuyết spin glass. Hopfield còn xây bản analog (động học mạch điện tử, nhiệt độ hiệu dụng) và cùng Tank dùng nó giải bài toán tối ưu rời rạc khó.
+
+\textbf{Máy Boltzmann (1983--1985).} Hinton, Sejnowski và cộng sự mở rộng ngẫu nhiên mô hình Hopfield: mỗi trạng thái tuân phân phối Boltzmann $P(\mathbf{s}) \propto e^{-E/T}$, $E=-\sum_{i<j} w_{ij}s_is_j-\sum_i \theta_i s_i$. Đây là mô hình sinh (generative) với nút ẩn mô tả phân phối tổng quát, học bằng thuật toán gradient thanh lịch nhưng mỗi bước cần mô phỏng cân bằng tốn kém nên ban đầu ít ứng dụng; bản rút gọn RBM (không nối cùng tầng) về sau thành công cụ đa năng.
+
+\textbf{Lan truyền ngược và học sâu.} Rumelhart, Hinton và Williams (1986) chứng minh mạng tiến có tầng ẩn huấn luyện được bằng backpropagation (cực tiểu hóa bình phương sai số bằng gradient descent), làm được bài toán mà mạng không tầng ẩn bó tay và làm rõ vai trò nút ẩn. CNN nhiều tầng (LeCun, Bengio) đọc séc ngân hàng từ thập niên 1990; LSTM (Hochreiter--Schmidhuber) xử lý chuỗi. Đột phá 2000s: Hinton dùng RBM với thuật toán \textit{contrastive divergence} tiền huấn luyện từng lớp rồi tinh chỉnh toàn mạng bằng backpropagation, hiện thực mạng sâu dày đầu tiên --- cột mốc của deep learning.
+
+\textbf{ANN cho khoa học và đời sống.} Ngược lại, ANN thành công cụ vật lý: xấp xỉ hàm (vật liệu, nước, khí hậu), tìm Higgs ở LEP/LHC, top quark, ảnh neutrino IceCube, ngoại hành tinh Kepler, ảnh lỗ đen EHT và đặc biệt AlphaFold dự đoán cấu trúc protein. Trong đời sống: nhận dạng ảnh, sinh ngôn ngữ, hỗ trợ chẩn đoán (ung thư vú, MRI). Kết luận: Hopfield và Hinton đã trao cho nhân loại công cụ mới mang tính cách mạng; cách dùng nó phụ thuộc vào con người.
+
+\end{document}
