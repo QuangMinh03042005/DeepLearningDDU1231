@@ -9,6 +9,9 @@ pip-wheel-metadata/
 
 # Jupyter
 .ipynb_checkpoints/
+*_check.ipynb
+*_verify*.ipynb
+lab02_gd*.ipynb
 
 # OS / Editor
 .DS_Store
@@ -20,4 +23,5 @@ Thumbs.db
 Lab02/data/*.csv
 Lab02/experiments/**/*.pt
 Lab02/experiments/oof/*.npy
+Lab02/experiments/processed/
 Lab02/experiments/figures/

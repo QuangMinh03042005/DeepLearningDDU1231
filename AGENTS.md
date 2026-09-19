@@ -28,7 +28,8 @@ File này là nguồn quy ước duy nhất cho agent khi làm việc trong repo
 
 ## 4. Chuẩn code
 
-- Comment **ngắn gọn, tiếng Việt**, giải thích từng khối/import lạ.
+- Comment **ngắn gọn, tiếng Việt có dấu** (cả comment code lẫn tiêu đề/nhãn biểu đồ),
+  giải thích từng khối/import lạ.
 - Mọi code sinh ra phải chạy `.\.venv\Scripts\ruff format` (và `ruff check` khi phù hợp).
 - Cố định seed (`SEED = 42`) cho mọi thí nghiệm để tái lập kết quả.
 - Đường dẫn tương đối, chạy được cả từ root lẫn trong thư mục lab
