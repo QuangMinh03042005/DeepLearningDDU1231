@@ -1,9 +1,15 @@
-# Môi trường cho Lab01 - Làm quen với PyTorch (CPU, Python 3.12)
+# Môi trường cho Lab01 + Lab02 (CPU, Python 3.12)
 # Cài đặt: .\.venv\Scripts\pip install -r requirements.txt
 # torch CPU lấy từ PyTorch index:
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
 numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
 jupyter
 ipykernel
 nbconvert
+ruff
+pypdf

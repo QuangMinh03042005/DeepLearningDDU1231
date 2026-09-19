@@ -14,3 +14,10 @@ pip-wheel-metadata/
 .DS_Store
 Thumbs.db
 .vscode/
+.zed/
+
+# Lab02: du lieu Kaggle + artifact nang (tai tao duoc tu notebook)
+Lab02/data/*.csv
+Lab02/experiments/**/*.pt
+Lab02/experiments/oof/*.npy
+Lab02/experiments/figures/
