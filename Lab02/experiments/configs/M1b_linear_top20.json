@@ -1,0 +1,37 @@
+{
+ "exp_id": "M1b_linear_top20",
+ "model": "Linear-OLS (top-20)",
+ "params": {
+  "k": 20,
+  "solver": "lstsq",
+  "cols": [
+   "OverallQual",
+   "GrLivArea",
+   "GarageCars",
+   "GarageArea",
+   "TotalBsmtSF",
+   "1stFlrSF",
+   "FullBath",
+   "YearBuilt",
+   "YearRemodAdd",
+   "GarageYrBlt",
+   "TotRmsAbvGrd",
+   "Fireplaces",
+   "MasVnrArea",
+   "BsmtFinSF1",
+   "LotFrontage",
+   "WoodDeckSF",
+   "OpenPorchSF",
+   "2ndFlrSF",
+   "HalfBath",
+   "LotArea"
+  ]
+ },
+ "fold_scores": [
+  0.14741219935211983,
+  0.12858103603895107,
+  0.1435373032816214,
+  0.14068381652867865,
+  0.11760131227730394
+ ]
+}
