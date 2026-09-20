@@ -1,0 +1,10 @@
+{
+ "exp_id": "M2_ridge_l0.001_scr",
+ "model": "Ridge-screen",
+ "params": {
+  "l2": 0.001
+ },
+ "fold_scores": [
+  0.14753174216535694
+ ]
+}

@@ -1,0 +1,11 @@
+{
+ "exp_id": "M3_enet_a1.0_l1e-05_scr",
+ "model": "ElasticNet-screen",
+ "params": {
+  "alpha": 1.0,
+  "l2": 1e-05
+ },
+ "fold_scores": [
+  0.12495594259617937
+ ]
+}
