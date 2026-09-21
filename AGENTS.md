@@ -32,6 +32,11 @@ File này là nguồn quy ước duy nhất cho agent khi làm việc trong repo
   giải thích từng khối/import lạ.
 - Mọi code sinh ra phải chạy `.\.venv\Scripts\ruff format` (và `ruff check` khi phù hợp).
 - Cố định seed (`SEED = 42`) cho mọi thí nghiệm để tái lập kết quả.
+- Giữ code ở mức sinh viên đang học môn Học sâu hiểu được: pipeline từng
+  bước tường minh (pandas từng bước thay vì `ColumnTransformer`/`Pipeline`
+  lồng nhau; vòng lặp đơn giản thay vì class Transformer tự viết hay hàm
+  chung khó đọc). Không trừu tượng hóa sớm — viết lặp rõ ràng còn hơn
+  gộp chung khó hiểu.
 - Đường dẫn tương đối, chạy được cả từ root lẫn trong thư mục lab
   (vd: `Path('data') if Path('data').exists() else Path('Lab02/data')`).
 - Không dùng `bash` cho thao tác file (đọc/viết/sửa) — dùng tool chuyên dụng.
@@ -39,8 +44,12 @@ File này là nguồn quy ước duy nhất cho agent khi làm việc trong repo
 ## 5. Chuẩn notebook (`labXX.ipynb`)
 
 - Chia Part rõ ràng theo yêu cầu đề bài (hoặc 6 bước CRISP-DM với lab ML).
+- Mỗi cell code có 1 cell markdown giải thích đứng ngay trước
+  (ý tưởng + vì sao làm + mong đợi gì), ngắn gọn 2–4 câu.
 - Yêu cầu trong đề phải có đủ 3 phần: **code + kết quả chạy + nhận xét**.
 - Verify bằng `jupyter nbconvert --execute` — **0 cell lỗi** mới coi là xong.
+- Khi đơn giản hóa code cũ: đối chiếu kết quả (mảng/điểm số) khớp 100%
+  trước khi thay, để nhật ký thí nghiệm không sai lệch.
 
 ## 6. Chuẩn báo cáo LaTeX → PDF
 
