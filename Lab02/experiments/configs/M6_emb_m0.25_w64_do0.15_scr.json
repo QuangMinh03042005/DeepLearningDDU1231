@@ -1,0 +1,12 @@
+{
+ "exp_id": "M6_emb_m0.25_w64_do0.15_scr",
+ "model": "EmbMLP-screen",
+ "params": {
+  "mult": 0.25,
+  "w": 64,
+  "do": 0.15
+ },
+ "fold_scores": [
+  0.13362316912477198
+ ]
+}

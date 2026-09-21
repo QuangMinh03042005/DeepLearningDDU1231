@@ -1,0 +1,15 @@
+{
+ "exp_id": "M5_mlp_a128x128_do0.1_bn0_scr",
+ "model": "MLPdeep-screen",
+ "params": {
+  "arch": [
+   128,
+   128
+  ],
+  "do": 0.1,
+  "bn": false
+ },
+ "fold_scores": [
+  0.15359599063834403
+ ]
+}

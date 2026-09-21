@@ -1,0 +1,12 @@
+{
+ "exp_id": "M4_mlp_h128_lr0.003_do0.1_scr",
+ "model": "MLP1-screen",
+ "params": {
+  "h": 128,
+  "lr": 0.003,
+  "do": 0.1
+ },
+ "fold_scores": [
+  0.13175713033869638
+ ]
+}

@@ -28,3 +28,27 @@ Metric: RMSLE trên thang log(SalePrice). CV: 5-fold, seed cố định.
 | M3_enet_a0.2_l0.001_scr | ElasticNet-screen | `{"alpha": 0.2, "l2": 0.001}` | 0.13286 ± 0.0 | screening fold0 | loại (screening) |
 | M3_enet_a1.0_l1e-05 | ElasticNet | `{"alpha": 1.0, "l2": 1e-05}` | 0.12392 ± 0.01058 | refine 5-fold | dự phòng |
 | M3_enet_a0.2_l1e-05 | ElasticNet | `{"alpha": 0.2, "l2": 1e-05}` | 0.12389 ± 0.01054 | refine 5-fold | giữ → ensemble |
+| M4_mlp_h64_lr0.01_do0.0_scr | MLP1-screen | `{"h": 64, "lr": 0.01, "do": 0.0}` | 0.1296 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h64_lr0.01_do0.1_scr | MLP1-screen | `{"h": 64, "lr": 0.01, "do": 0.1}` | 0.14094 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h64_lr0.003_do0.0_scr | MLP1-screen | `{"h": 64, "lr": 0.003, "do": 0.0}` | 0.12883 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h64_lr0.003_do0.1_scr | MLP1-screen | `{"h": 64, "lr": 0.003, "do": 0.1}` | 0.1477 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h128_lr0.01_do0.0_scr | MLP1-screen | `{"h": 128, "lr": 0.01, "do": 0.0}` | 0.13168 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h128_lr0.01_do0.1_scr | MLP1-screen | `{"h": 128, "lr": 0.01, "do": 0.1}` | 0.13666 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h128_lr0.003_do0.0_scr | MLP1-screen | `{"h": 128, "lr": 0.003, "do": 0.0}` | 0.12867 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h128_lr0.003_do0.1_scr | MLP1-screen | `{"h": 128, "lr": 0.003, "do": 0.1}` | 0.13176 ± 0.0 | screening fold0 | loại (screening) |
+| M4_mlp_h128_lr0.003_do0.0 | MLP1 | `{"h": 128, "lr": 0.003, "do": 0.0}` | 0.12591 ± 0.00987 | refine 5-fold | dự phòng |
+| M4_mlp_h64_lr0.003_do0.0 | MLP1 | `{"h": 64, "lr": 0.003, "do": 0.0}` | 0.1252 ± 0.0102 | refine 5-fold | giữ → ensemble |
+| M5_mlp_a128x64_do0.1_bn0_scr | MLPdeep-screen | `{"arch": [128, 64], "do": 0.1, "bn": false}` | 0.15892 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x64_do0.1_bn1_scr | MLPdeep-screen | `{"arch": [128, 64], "do": 0.1, "bn": true}` | 0.4899 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x64_do0.2_bn0_scr | MLPdeep-screen | `{"arch": [128, 64], "do": 0.2, "bn": false}` | 0.17514 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x64_do0.2_bn1_scr | MLPdeep-screen | `{"arch": [128, 64], "do": 0.2, "bn": true}` | 0.49242 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x128_do0.1_bn0_scr | MLPdeep-screen | `{"arch": [128, 128], "do": 0.1, "bn": false}` | 0.1536 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x128_do0.1_bn1_scr | MLPdeep-screen | `{"arch": [128, 128], "do": 0.1, "bn": true}` | 0.45513 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x128_do0.2_bn0_scr | MLPdeep-screen | `{"arch": [128, 128], "do": 0.2, "bn": false}` | 0.17101 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x128_do0.2_bn1_scr | MLPdeep-screen | `{"arch": [128, 128], "do": 0.2, "bn": true}` | 0.44472 ± 0.0 | screening fold0 | loại (screening) |
+| M5_mlp_a128x128_do0.1_bn0 | MLPdeep | `{"arch": [128, 128], "do": 0.1, "bn": false}` | 0.14114 ± 0.00867 | refine 5-fold | dự phòng ensemble |
+| M5_mlp_a128x64_do0.1_bn0 | MLPdeep | `{"arch": [128, 64], "do": 0.1, "bn": false}` | 0.145 ± 0.00519 | refine 5-fold | loại (thua bản 128x128) |
+| M6_emb_m0.25_w64_do0.15_scr | EmbMLP-screen | `{"mult": 0.25, "w": 64, "do": 0.15}` | 0.13362 ± 0.0 | screening fold0 | loại (screening) |
+| M6_emb_m0.5_w64_do0.15_scr | EmbMLP-screen | `{"mult": 0.5, "w": 64, "do": 0.15}` | 0.14156 ± 0.0 | screening fold0 | loại (screening) |
+| M6_emb_m0.25_w64_do0.15 | EmbMLP | `{"mult": 0.25, "w": 64, "do": 0.15}` | 0.13484 ± 0.0086 | refine 5-fold | giữ → ensemble (đa dạng) |
+| M6_emb_m0.5_w64_do0.15 | EmbMLP | `{"mult": 0.5, "w": 64, "do": 0.15}` | 0.15778 ± 0.02221 | refine 5-fold | dự phòng |
