@@ -1,0 +1,11 @@
+{
+ "exp_id": "M2b_ridge_l30_scr",
+ "model": "RidgeB-screen",
+ "params": {
+  "l2": 30.0,
+  "feat": "308"
+ },
+ "fold_scores": [
+  0.11961837019422063
+ ]
+}

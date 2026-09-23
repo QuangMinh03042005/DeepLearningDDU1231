@@ -52,3 +52,11 @@ Metric: RMSLE trên thang log(SalePrice). CV: 5-fold, seed cố định.
 | M6_emb_m0.5_w64_do0.15_scr | EmbMLP-screen | `{"mult": 0.5, "w": 64, "do": 0.15}` | 0.14156 ± 0.0 | screening fold0 | loại (screening) |
 | M6_emb_m0.25_w64_do0.15 | EmbMLP | `{"mult": 0.25, "w": 64, "do": 0.15}` | 0.13484 ± 0.0086 | refine 5-fold | giữ → ensemble (đa dạng) |
 | M6_emb_m0.5_w64_do0.15 | EmbMLP | `{"mult": 0.5, "w": 64, "do": 0.15}` | 0.15778 ± 0.02221 | refine 5-fold | dự phòng |
+| M7_blend | Blend-4 | `{"w": [0.9, 0.0, 0.0, 0.1], "members": ["Ridge-10", "Enet", "M4", "M6"]}` | 0.1114 ± 0.00787 | ensemble 4 mô hình, trọng số tune trên OOF | LB lan 1: 0.12581 | bản nộp Kaggle lần 1 |
+| M2b_ridge_l3_scr | RidgeB-screen | `{"l2": 3.0, "feat": "308"}` | 0.11829 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M2b_ridge_l10_scr | RidgeB-screen | `{"l2": 10.0, "feat": "308"}` | 0.11846 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M2b_ridge_l30_scr | RidgeB-screen | `{"l2": 30.0, "feat": "308"}` | 0.11962 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M2b_ridge_l100_scr | RidgeB-screen | `{"l2": 100.0, "feat": "308"}` | 0.12217 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M2b_ridge_l3 | RidgeB | `{"l2": 3.0, "feat": "308"}` | 0.11361 ± 0.00732 | refine 5-fold, đặc trưng mới | loại (thua l10) |
+| M2b_ridge_l10 | RidgeB | `{"l2": 10.0, "feat": "308"}` | 0.11201 ± 0.00786 | refine 5-fold, đặc trưng mới | thua Ridge cũ, chỉ để trộn thử |
+| M7b_blend2 | Blend2 | `{"w_old": 1.0, "w_new": 0.0}` | 0.1114 ± 0.00787 | M7 cũ + Ridge đặc trưng mới | KHÔNG nộp (giống hệt lần 1) |
