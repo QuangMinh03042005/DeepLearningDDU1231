@@ -91,6 +91,26 @@ RMSLE phạt sai số \textit{tương đối}: đoán lệch 10 nghìn USD trên
 mức lệch trên nhà đắt. Hệ quả thiết kế xuyên suốt bài làm: mọi huấn luyện, đánh giá và trộn mô
 hình đều thực hiện trên thang $\log(1+y)$.
 
+\subsection{Cấu trúc dự án}
+Mọi sản phẩm của bài làm gói gọn trong thư mục \texttt{Lab02/}:
+{\small
+\begin{verbatim}
+Lab02/
+|-- data/                  # train.csv, test.csv (Kaggle)
+|-- lab02.ipynb            # notebook chính (CRISP-DM, 102 cells)
+|-- experiments/           # nhật ký + artifact thí nghiệm
+|   |-- model_log.md       # nhật ký 70 thí nghiệm (người đọc)
+|   |-- runs.csv           # cùng dữ liệu dạng bảng (máy đọc)
+|   |-- configs/           # cấu hình từng thí nghiệm (JSON)
+|   |-- models/            # trọng số PyTorch (.pt)
+|   |-- oof/               # dự báo out-of-fold + test (.npy)
+|   `-- figures/           # ảnh EDA, xếp hạng, residual
+|-- submissions/           # 5 file nộp Kaggle (lần 1--5)
+|-- report/                # báo cáo này + logo + ảnh minh chứng
+`-- decock.pdf             # paper gốc (Ames Housing)
+\end{verbatim}
+}
+
 \subsection{Ràng buộc và tiêu chí thành công}
 \begin{itemize}
   \item Toàn bộ mô hình cài đặt bằng \textbf{PyTorch} (sklearn chỉ hỗ trợ chia fold và tiền xử lý).
