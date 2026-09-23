@@ -1,0 +1,11 @@
+{
+ "exp_id": "M4b_mlp_h64_scr",
+ "model": "MLP1B-screen",
+ "params": {
+  "h": 64,
+  "feat": "308"
+ },
+ "fold_scores": [
+  0.13107766049944147
+ ]
+}

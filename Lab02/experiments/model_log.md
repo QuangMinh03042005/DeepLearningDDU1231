@@ -60,3 +60,7 @@ Metric: RMSLE trên thang log(SalePrice). CV: 5-fold, seed cố định.
 | M2b_ridge_l3 | RidgeB | `{"l2": 3.0, "feat": "308"}` | 0.11361 ± 0.00732 | refine 5-fold, đặc trưng mới | loại (thua l10) |
 | M2b_ridge_l10 | RidgeB | `{"l2": 10.0, "feat": "308"}` | 0.11201 ± 0.00786 | refine 5-fold, đặc trưng mới | thua Ridge cũ, chỉ để trộn thử |
 | M7b_blend2 | Blend2 | `{"w_old": 1.0, "w_new": 0.0}` | 0.1114 ± 0.00787 | M7 cũ + Ridge đặc trưng mới | KHÔNG nộp (giống hệt lần 1) |
+| M4b_mlp_h64_scr | MLP1B-screen | `{"h": 64, "feat": "308"}` | 0.13108 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M4b_mlp_h128_scr | MLP1B-screen | `{"h": 128, "feat": "308"}` | 0.13361 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
+| M4b_mlp_h64 | MLP1B | `{"h": 64, "feat": "308"}` | 0.12397 ± 0.01216 | refine 5-fold, đặc trưng mới | giữ (thắng M4 cũ) -> trộn M7c |
+| M7c_blend3 | Blend3 | `{"w_old": 0.9, "w_new": 0.1}` | 0.11128 ± 0.00845 | M7 cũ + M4b đặc trưng mới | bản nộp Kaggle lần 2 |
