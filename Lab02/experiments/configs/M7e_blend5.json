@@ -1,0 +1,15 @@
+{
+ "exp_id": "M7e_blend5",
+ "model": "Blend5-th\u1eed",
+ "params": {
+  "w_cur": 1.0,
+  "w_new": 0.0
+ },
+ "fold_scores": [
+  0.11103,
+  0.11103,
+  0.11103,
+  0.11103,
+  0.11103
+ ]
+}
