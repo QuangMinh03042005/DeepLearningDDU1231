@@ -9,6 +9,7 @@ File này là nguồn quy ước duy nhất cho agent khi làm việc trong repo
   - Lab thực hành: `LabXX/` gồm đề PDF, `labXX.ipynb`, `bao_cao_labXX.tex` / `.pdf`.
   - Lab ML (Kaggle): thêm `data/` (CSV), `experiments/`, `submissions/` (1 file mỗi lần nộp).
   - Bài lý thuyết: `EX-XXX/` gồm PDF gốc + `tom_tat_*.tex` / `.pdf`.
+  - Báo cáo để trong `report/` cùng lab (kèm logo trường `SGU-LOGO.png` trên bìa).
 - Ngôn ngữ giao tiếp và comment code: **tiếng Việt**.
 
 ## 2. Thông tin sinh viên (dùng cho trang bìa báo cáo)
