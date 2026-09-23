@@ -64,3 +64,8 @@ Metric: RMSLE trên thang log(SalePrice). CV: 5-fold, seed cố định.
 | M4b_mlp_h128_scr | MLP1B-screen | `{"h": 128, "feat": "308"}` | 0.13361 ± 0.0 | screening fold0, đặc trưng mới | loại (screening) |
 | M4b_mlp_h64 | MLP1B | `{"h": 64, "feat": "308"}` | 0.12397 ± 0.01216 | refine 5-fold, đặc trưng mới | giữ (thắng M4 cũ) -> trộn M7c |
 | M7c_blend3 | Blend3 | `{"w_old": 0.9, "w_new": 0.1}` | 0.11128 ± 0.00845 | M7 cũ + M4b đặc trưng mới | bản nộp Kaggle lần 2 |
+| M2c_ridge_l30_scr | RidgeC-screen | `{"l2": 30.0}` | 0.1195 ± 0.0 | screening fold0, phạt mạnh | loại (screening) |
+| M2c_ridge_l100_scr | RidgeC-screen | `{"l2": 100.0}` | 0.12234 ± 0.0 | screening fold0, phạt mạnh | loại (screening) |
+| M2c_ridge_l300_scr | RidgeC-screen | `{"l2": 300.0}` | 0.12816 ± 0.0 | screening fold0, phạt mạnh | loại (screening) |
+| M2c_ridge_l30 | RidgeC | `{"l2": 30.0}` | 0.11222 ± 0.00835 | refine 5-fold, phạt mạnh | giữ để trộn (ít overfit hơn) |
+| M7d_blend4 | Blend4 | `{"w_cur": 0.7, "w_new": 0.3}` | 0.11103 ± 0.00848 | M7 hiện tại + Ridge phạt mạnh | bản nộp Kaggle lần 3 |

@@ -1,0 +1,10 @@
+{
+ "exp_id": "M2c_ridge_l300_scr",
+ "model": "RidgeC-screen",
+ "params": {
+  "l2": 300.0
+ },
+ "fold_scores": [
+  0.12815882235118312
+ ]
+}

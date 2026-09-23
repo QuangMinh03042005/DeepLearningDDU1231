@@ -7,7 +7,7 @@ File này là nguồn quy ước duy nhất cho agent khi làm việc trong repo
 
 - Môn: Học sâu (Deep Learning). Mỗi lab nằm trong 1 thư mục riêng:
   - Lab thực hành: `LabXX/` gồm đề PDF, `labXX.ipynb`, `bao_cao_labXX.tex` / `.pdf`.
-  - Lab ML (Kaggle): thêm `data/` (CSV), `experiments/`, `submission.csv`.
+  - Lab ML (Kaggle): thêm `data/` (CSV), `experiments/`, `submissions/` (1 file mỗi lần nộp).
   - Bài lý thuyết: `EX-XXX/` gồm PDF gốc + `tom_tat_*.tex` / `.pdf`.
 - Ngôn ngữ giao tiếp và comment code: **tiếng Việt**.
 
