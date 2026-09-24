@@ -215,7 +215,7 @@ Kết luận GĐ2: bài toán gần tuyến tính + dữ liệu nhỏ nên Ridge
 lại lấy tính đa dạng cho ensemble.
 
 \newpage
-\section{Ensemble và nộp bài}
+\section{Đánh giá mô hình (Evaluation)}
 
 \subsection{Chọn đội hình và trộn mô hình}
 Đội hình ensemble gồm 4 mô hình vừa mạnh vừa khác kiểu nhau: Ridge-10, ElasticNet, M4 và
@@ -231,6 +231,9 @@ Ridge) — OOF 0.11140, hơn Ridge đơn 0.11193.
 \subsection{Phân tích residual}
 Trên thang USD: mọi mô hình bias âm nhẹ (đoán thấp hơn thật 1--4k), MAE 13.5--15.7k, sai số
 lớn nhất rơi vào nhà đắt tiền (161--260k) — đúng bản chất RMSLE nhẹ tay với nhà đắt.
+
+\newpage
+\section{Triển khai (Deployment)}
 
 \subsection{5 lần nộp và bài học overfit}
 \begin{center}
