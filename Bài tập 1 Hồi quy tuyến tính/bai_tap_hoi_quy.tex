@@ -1,0 +1,1150 @@
+\documentclass[a4paper,12pt]{article}
+
+% --- Tiếng Việt + mã UTF-8 ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Bố cục trang ---
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=2cm}
+
+% --- Toán ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% --- Hình vẽ ---
+\usepackage{tikz}
+
+% --- Hình ảnh ---
+\usepackage{graphicx}
+
+% --- Liên kết ---
+\usepackage{hyperref}
+
+\begin{document}
+
+% ================= TRANG BÌA =================
+\begin{center}
+\large TRƯỜNG ĐẠI HỌC SÀI GÒN \\[0.3cm]
+\includegraphics[width=4cm]{../SGU-LOGO.png} \\[0.3cm]
+\large KHOA TOÁN -- ỨNG DỤNG \\[0.3cm]
+\rule{12cm}{1.5pt} \\[0.8cm]
+
+\Large \textbf{BÀI TẬP 1: HỒI QUY} \\[0.4cm]
+\large Môn: Học sâu (Deep Learning) \\
+\large (Phần 1: Hồi quy tuyến tính \& phân lớp; Phần 2: Bài tập bổ sung) \\[1.2cm]
+
+\begin{tabular}{ll}
+Họ và tên: & Đinh Quang Minh \\
+MSSV: & 3123580024 \\
+Lớp: & DDU1231 \\
+Ngành: & Khoa học dữ liệu \\
+Giảng viên hướng dẫn: & TS. Đỗ Như Tài \\
+Học kỳ: & Học kỳ I, năm học 2026 \\
+\end{tabular}\\[1.5cm]
+
+TP. Hồ Chí Minh, tháng 9 năm 2026 \\
+\end{center}
+
+\newpage
+
+\section*{PHƯƠNG PHÁP THỰC HIỆN}
+
+Bài làm này được hoàn thành theo quy trình kết hợp giải tay và công cụ AI như sau:
+
+\begin{enumerate}
+  \item \textbf{Giải tay toàn bộ trước:} đọc kỹ đề gốc, tính toán chi tiết từng câu
+        trên giấy, ghi lại đầy đủ các bước trung gian và đáp số cuối cùng.
+  \item \textbf{Dùng AI agent tạo \LaTeX{}:} agent đọc file \texttt{.docx}, dựng khung
+        tài liệu, chuyển bảng biểu và công thức sang cú pháp \LaTeX{} và hoàn thành
+        đáp án cho các câu còn thiếu.
+  \item \textbf{Đối chiếu với bài giải tay:} so từng đáp số trong file \LaTeX{} với bài
+        giải tay, tính lại các bước trung gian đến khi khớp hoàn toàn.
+        Chỗ nào đề gốc ghi chưa rõ (ví dụ ký hiệu vector khởi tạo ở Câu 10 Phần 1)
+        được ghi chú rõ trong bài.
+  \item \textbf{Hoàn thiện:} biên dịch \texttt{pdflatex} 2 lần, kiểm tra không còn lỗi,
+        rà soát chính tả và định dạng lần cuối.
+\end{enumerate}
+
+Nói ngắn gọn: AI hỗ trợ trình bày và kiểm tra, còn toàn bộ lời giải đều do người làm
+tính toán và chịu trách nhiệm.
+
+\newpage
+
+\section*{HỒI QUY TUYẾN TÍNH}
+
+\subsection*{CÂU 1. XÂY DỰNG PHƯƠNG TRÌNH HỒI QUY TUYẾN TÍNH ĐƠN}
+
+Cho tập dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ \\
+\hline
+1 & 3 \\
+2 & 5 \\
+3 & 7 \\
+4 & 9 \\
+5 & 11 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình hồi quy: $y = \beta_0 + \beta_1 x$
+
+Yêu cầu:
+
+a) Tính giá trị trung bình $\bar{x}$ và $\bar{y}$.
+
+$\bar{x} = 3$
+
+$\bar{y} = 7$
+
+b) Tính:
+\[ SS_{xy} = \sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y}) \qquad
+   SS_{x} = \sum_{i=1}^{n}(x_i - \bar{x})^2 \]
+
+$SS_{xy} = 20$
+
+$SS_{x} = 10$
+
+c) Tính hệ số:
+\[ \hat{\beta}_1 = \frac{SS_{xy}}{SS_{x}} \qquad \hat{\beta}_1 = 2 \]
+
+d) Tính hệ số chặn:
+\[ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} \qquad \hat{\beta}_0 = 1 \]
+
+e) Viết phương trình hồi quy tuyến tính.
+
+$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x = 1 + 2x$
+
+f) Dự đoán giá trị $y$ khi $x = 6$.
+
+$\hat{y}(6) = 1 + 2 \cdot 6 = 13$
+
+\subsection*{CÂU 2. TÍNH MEAN SQUARED ERROR (MSE)}
+
+Cho mô hình hồi quy: $\hat{y} = 2x + 1$ và tập dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ \\
+\hline
+1 & 4 \\
+2 & 6 \\
+3 & 8 \\
+4 & 11 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính giá trị dự đoán $\hat{y}$ của từng mẫu.
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $\hat{y}$ \\
+\hline
+1 & 3 \\
+2 & 5 \\
+3 & 7 \\
+4 & 9 \\
+\hline
+\end{tabular}
+\end{center}
+
+b) Tính sai số:
+\[ e_i = \hat{y}_i - y_i \]
+
+$e_1 = -1$
+
+$e_2 = -1$
+
+$e_3 = -1$
+
+$e_4 = -2$
+
+c) Tính Mean Squared Error:
+\[ MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \]
+
+$MSE = 1.75$
+
+d) Nhận xét độ phù hợp của mô hình.
+
+Mô hình cũng khá phù hợp khi có sai số thấp.
+
+\subsection*{CÂU 3. GRADIENT DESCENT CHO LINEAR REGRESSION}
+
+Cho tập dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ \\
+\hline
+1 & 3 \\
+2 & 5 \\
+4 & 9 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình: $\hat{y} = wx + b$
+
+Khởi tạo: $w = 0$, $b = 0$
+
+Learning rate: $\eta = 0.1$
+
+Hàm mất mát:
+\[ J(w,b) = \frac{1}{2m}\sum_{i=1}^{m}(y_i - (wx_i + b))^2 \]
+
+Yêu cầu:
+
+a) Tính giá trị dự đoán của từng mẫu.
+
+Bằng 0 hết.
+
+b) Tính gradient:
+\[ \frac{\partial J}{\partial w}, \quad \frac{\partial J}{\partial b} \]
+
+\[ \frac{\partial J}{\partial w} = -127.67 \]
+
+\[ \frac{\partial J}{\partial b} = -38.33 \]
+
+c) Thực hiện 1 bước cập nhật Gradient Descent:
+\[ w_{new} = w - \eta\frac{\partial J}{\partial w} \qquad
+   b_{new} = b - \eta\frac{\partial J}{\partial b} \]
+
+$w_{new} = 12.767$
+
+$b_{new} = 3.83$
+
+d) Viết phương trình hồi quy mới sau cập nhật.
+
+$\hat{y} = 12.767x + 3.83$
+
+\subsection*{CÂU 4. HỒI QUY TUYẾN TÍNH ĐA BIẾN}
+
+Cho tập dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$x_1$ & $x_2$ & $y$ \\
+\hline
+1 & 2 & 5 \\
+2 & 1 & 6 \\
+3 & 2 & 9 \\
+4 & 3 & 12 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình: $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2$
+
+Yêu cầu:
+
+a) Viết ma trận dữ liệu $X$ và vector $Y$.
+\[ X = \begin{pmatrix}
+1 & 1 & 2 \\
+1 & 2 & 1 \\
+1 & 3 & 2 \\
+1 & 4 & 3
+\end{pmatrix}, \qquad
+Y = \begin{pmatrix} 5 \\ 6 \\ 9 \\ 12 \end{pmatrix} \]
+
+b) Viết công thức nghiệm chuẩn:
+\[ \hat{\beta} = (X^T X)^{-1} X^T Y \]
+
+c) Tính $X^T X$.
+\[ X^T X = \begin{pmatrix}
+4 & 10 & 8 \\
+10 & 30 & 22 \\
+8 & 22 & 18
+\end{pmatrix} \]
+
+d) Tính $X^T Y$.
+\[ X^T Y = \begin{pmatrix} 32 \\ 92 \\ 70 \end{pmatrix} \]
+
+e) Tính vector tham số $\hat{\beta}$.
+\[ \hat{\beta} = \begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix} \]
+tức $\hat{\beta}_0 = 1$, $\hat{\beta}_1 = 2$, $\hat{\beta}_2 = 1$.
+Thử lại: $\hat{y} = 1 + 2x_1 + x_2$ cho đúng cả 4 mẫu
+($5, 6, 9, 12$).
+
+f) Dự đoán giá trị $y$ khi $x_1 = 5$, $x_2 = 2$.
+
+$\hat{y} = 1 + 2 \cdot 5 + 2 = 13$
+
+\subsection*{CÂU 5. HỒI QUY TUYẾN TÍNH}
+
+Cho tập dữ liệu gồm 5 điểm dữ liệu $(x, y)$ như sau: $(1,2)$, $(2,3)$, $(3,5)$,
+$(4,4)$, $(5,6)$. Xét mô hình hồi quy tuyến tính:
+\[ y = wx + b \]
+Giả sử các tham số ban đầu:
+\[ w_0 = 0, \quad b_0 = 0 \]
+Hàm mất mát được sử dụng là:
+\[ J(w,b) = \frac{1}{2m}\sum_{i=1}^{m}\left( y_i - \left( wx_i + b \right) \right)^{2} \]
+với $m = 5$.
+
+Thuật toán huấn luyện sử dụng Batch Gradient Descent với learning rate $\eta = 0.1$.
+
+Anh/chị hãy:
+
+a) Viết biểu thức đạo hàm $\frac{\partial J}{\partial w}$,
+$\frac{\partial J}{\partial b}$, và $J(w,b)$ theo tập điểm dữ liệu.
+\[ \frac{\partial J}{\partial w} = -\frac{1}{5}\sum_{i=1}^{5}x_i\bigl(y_i - wx_i - b\bigr) \]
+\[ = -\frac{1}{5}\Bigl[1\cdot(2 - w - b) + 2\cdot(3 - 2w - b) + 3\cdot(5 - 3w - b) + 4\cdot(4 - 4w - b) + 5\cdot(6 - 5w - b)\Bigr] \]
+\[ \frac{\partial J}{\partial b} = -\frac{1}{5}\sum_{i=1}^{5}\bigl(y_i - wx_i - b\bigr) \]
+\[ = -\frac{1}{5}\Bigl[(2 - w - b) + (3 - 2w - b) + (5 - 3w - b) + (4 - 4w - b) + (6 - 5w - b)\Bigr] \]
+\[ J(w,b) = \frac{1}{10}\Bigl[(2 - w - b)^2 + (3 - 2w - b)^2 + (5 - 3w - b)^2 + (4 - 4w - b)^2 + (6 - 5w - b)^2\Bigr] \]
+
+b) Thực hiện một bước cập nhật Gradient Descent để tính $w^1$ và $b^1$.
+
+Tại $w = 0$, $b = 0$:
+\[ \frac{\partial J}{\partial w} = -\frac{1}{5}(2 + 6 + 15 + 16 + 30) = -13.8 \]
+\[ \frac{\partial J}{\partial b} = -\frac{1}{5}(2 + 3 + 5 + 4 + 6) = -4 \]
+\[ w^1 = 0 - 0.1 \cdot (-13.8) = 1.38 \qquad b^1 = 0 - 0.1 \cdot (-4) = 0.4 \]
+
+c) Sử dụng mô hình sau bước cập nhật thứ nhất để dự đoán giá trị $y$ khi $x = 6$.
+
+$\hat{y} = 1.38 \cdot 6 + 0.4 = 8.68$
+
+\section*{HỒI QUY PHÂN LỚP}
+
+\subsection*{CÂU 6. PHÂN LỚP BẰNG ĐƯỜNG QUYẾT ĐỊNH TUYẾN TÍNH}
+
+Cho: $w = (2, -1)$, $b = 1$
+
+Quy tắc phân lớp:
+\[ w^T x + b \geq 0 \Rightarrow \text{class } 1 \qquad
+   w^T x + b < 0 \Rightarrow \text{class } 0 \]
+
+Cho các điểm dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Điểm & $x_1$ & $x_2$ \\
+\hline
+A & 1 & 1 \\
+B & 2 & 1 \\
+C & 1 & 3 \\
+D & 4 & 2 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính giá trị: $w^T x + b$ cho từng điểm.
+
+Với $f(x) = 2x_1 - x_2 + 1$:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Điểm & $w^T x + b$ & Lớp \\
+\hline
+A$(1,1)$ & $2$ & 1 \\
+B$(2,1)$ & $4$ & 1 \\
+C$(1,3)$ & $0$ & 1 \\
+D$(4,2)$ & $7$ & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+b) Xác định lớp của từng điểm.
+
+Cả 4 điểm đều thuộc class 1 (điểm C nằm đúng trên đường biên vì giá trị bằng 0).
+
+c) Viết phương trình đường quyết định.
+\[ 2x_1 - x_2 + 1 = 0 \quad \text{hay} \quad x_2 = 2x_1 + 1 \]
+
+d) Vẽ các điểm dữ liệu và đường phân lớp trên hệ trục tọa độ.
+\begin{center}
+\begin{tikzpicture}[x=1.1cm, y=1.1cm]
+  \draw[->] (0,0) -- (5,0) node[below] {$x_1$};
+  \draw[->] (0,0) -- (0,4.6) node[left] {$x_2$};
+  \draw[thick] (0,1) -- (1.7,4.4) node[right] {$x_2 = 2x_1 + 1$};
+  \fill (1,1) circle (2pt) node[below right] {A};
+  \fill (2,1) circle (2pt) node[below right] {B};
+  \fill (1,3) circle (2pt) node[above right] {C};
+  \fill (4,2) circle (2pt) node[below right] {D};
+\end{tikzpicture}
+\end{center}
+
+\subsection*{CÂU 7. LOGISTIC REGRESSION, TÍNH XÁC SUẤT PHÂN LỚP}
+
+Cho mô hình Logistic Regression:
+\[ P(y = 1 \mid x) = \sigma(z) = \frac{1}{1 + e^{-z}} \]
+với: $z = w_1 x_1 + w_2 x_2 + b$
+
+Biết: $w_1 = 0.5$, $w_2 = -1$, $b = 0.2$
+
+Cho mẫu dữ liệu: $x = (2, 1)$
+
+Yêu cầu:
+
+a) Tính giá trị $z$.
+
+$z = 0.5 \cdot 2 + (-1) \cdot 1 + 0.2 = 0.2$
+
+b) Tính xác suất: $P(y = 1 \mid x)$
+\[ P(y = 1 \mid x) = \frac{1}{1 + e^{-0.2}} \approx 0.5498 \]
+
+c) Nếu ngưỡng phân lớp là 0.5 thì mẫu thuộc lớp nào?
+
+$0.5498 \geq 0.5$ nên mẫu thuộc lớp 1.
+
+d) Nếu ngưỡng phân lớp là 0.8 thì mẫu thuộc lớp nào?
+
+$0.5498 < 0.8$ nên mẫu thuộc lớp 0.
+
+\subsection*{CÂU 8. TÍNH CROSS-ENTROPY LOSS}
+
+Cho dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Mẫu & $y$ thực & $z$ \\
+\hline
+1 & 1 & 0.9 \\
+2 & 0 & 0.2 \\
+3 & 1 & 0.7 \\
+\hline
+\end{tabular}
+\end{center}
+
+Hàm mất mát:
+\[ J(w) = -\sum_{i=1}^{N}\left[ y_i \log z_i + (1 - y_i)\log(1 - z_i) \right] \]
+
+Yêu cầu:
+
+a) Tính loss của từng mẫu.
+
+Mẫu 1 ($y = 1$, $z = 0.9$): $l_1 = -\log 0.9 \approx 0.10536$
+
+Mẫu 2 ($y = 0$, $z = 0.2$): $l_2 = -\log(1 - 0.2) = -\log 0.8 \approx 0.22314$
+
+Mẫu 3 ($y = 1$, $z = 0.7$): $l_3 = -\log 0.7 \approx 0.35667$
+
+b) Tính tổng loss.
+\[ J = l_1 + l_2 + l_3 \approx 0.68518 \]
+
+c) Tính average loss.
+\[ \bar{J} = \frac{J}{3} \approx 0.22839 \]
+
+d) Nhận xét chất lượng mô hình.
+
+Loss trung bình thấp (0.23) cho thấy mô hình dự đoán khá sát nhãn thực.
+
+\subsection*{CÂU 9. PERCEPTRON LEARNING}
+
+Cho tập dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$x_1$ & $x_2$ & $t$ \\
+\hline
+1 & 1 & 1 \\
+2 & 1 & 1 \\
+1 & 3 & -1 \\
+\hline
+\end{tabular}
+\end{center}
+
+Khởi tạo: $w = (0, 0)$, $b = 0$, Learning rate $\rho = 1$
+
+Quy tắc cập nhật:
+\[ w^{(t+1)} = w^{(t)} + \rho t_k x_k \]
+\[ b^{(t+1)} = b^{(t)} + \rho t_k \]
+
+Yêu cầu:
+
+a) Xác định mẫu bị phân lớp sai.
+
+Với $w = (0,0)$, $b = 0$ mọi mẫu đều cho $w^T x + b = 0$:
+mẫu 1 ($t = 1$) và mẫu 3 ($t = -1$) bị phân lớp sai (tích $t \cdot (w^T x + b) \le 0$),
+mẫu 2 đúng sau khi đã cập nhật (xem dưới).
+
+b) Cập nhật trọng số sau từng mẫu.
+
+Duyệt từng mẫu với $\rho = 1$:
+\begin{itemize}
+  \item Mẫu 1 $((1,1), 1)$: sai ($0 \not> 0$) $\to$ $w = (0,0) + (1,1) = (1,1)$, $b = 0 + 1 = 1$.
+  \item Mẫu 2 $((2,1), 1)$: $w^T x + b = 4 > 0$, đúng, giữ nguyên.
+  \item Mẫu 3 $((1,3), -1)$: $w^T x + b = 5 > 0$ trong khi $t = -1$, sai
+        $\to$ $w = (1,1) - (1,3) = (0,-2)$, $b = 1 - 1 = 0$.
+\end{itemize}
+
+c) Tính trọng số cuối cùng sau 1 epoch.
+\[ w = (0, -2), \qquad b = 0 \]
+
+d) Viết phương trình đường quyết định mới.
+\[ -2x_2 = 0 \quad \text{hay} \quad x_2 = 0 \]
+
+\subsection*{CÂU 10. HỒI QUY PHÂN LỚP}
+
+Cho tập dữ liệu huấn luyện gồm 4 mẫu $(x_k, t_k)$, trong đó
+\[ x_k = (x_{k1}, x_{k2}) \in \mathbb{R}^2, \quad t_k \in \{-1, +1\}. \]
+Tập dữ liệu được cho như sau:
+\[ ((1, 1), +1), \quad ((2, 1), +1), \quad ((1, 2), -1), \quad ((2, 2), -1). \]
+Xét mô hình phân lớp tuyến tính:
+\[ \hat{y} = \text{sign}(w^T x + b), \]
+trong đó
+\[ \text{sign}(z) = \begin{cases}
++1, & z \geq 0, \\
+-1, & z < 0.
+\end{cases} \]
+Hàm chi phí được xác định bởi:
+\[ J(w, b) = \sum_{x_k \in Y} (-t_k)(w^T x_k + b), \]
+với $Y$ là tập các mẫu bị phân lớp sai.
+
+Anh/chị hãy:
+
+a) Xác định các mẫu bị phân lớp sai với tham số ban đầu $w^0 = (1, 1)$, $b^0 = 0$.
+(Đề ghi $w^0 = 1$, hiểu là vector khởi tạo có mỗi thành phần bằng 1 cho đúng chiều với $x \in \mathbb{R}^2$.)
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Mẫu & $w^T x + b$ & Dự đoán & Kết luận \\
+\hline
+$((1,1), +1)$ & $2$ & $+1$ & Đúng \\
+$((2,1), +1)$ & $3$ & $+1$ & Đúng \\
+$((1,2), -1)$ & $3$ & $+1$ & Sai \\
+$((2,2), -1)$ & $4$ & $+1$ & Sai \\
+\hline
+\end{tabular}
+\end{center}
+Vậy $Y = \{((1,2), -1),\, ((2,2), -1)\}$.
+
+b) Viết biểu thức đạo hàm $\frac{\partial J}{\partial w}$,
+$\frac{\partial J}{\partial b}$.
+
+Trên tập sai $Y$:
+\[ J(w, b) = (w_1 + 2w_2 + b) + (2w_1 + 2w_2 + b) = 3w_1 + 4w_2 + 2b \]
+\[ \frac{\partial J}{\partial w} = (3, 4), \qquad \frac{\partial J}{\partial b} = 2 \]
+
+c) Viết và thực hiện một bước cập nhật tham số theo Perceptron Learning.
+
+Lấy mẫu sai đầu tiên $((1,2), -1)$ với $\rho = 1$ (như Câu 9):
+\[ w \leftarrow (1,1) + (-1)\cdot(1,2) = (0,-1), \qquad b \leftarrow 0 + (-1) = -1. \]
+Kiểm tra: mẫu 3 cho $(0,-1)^T(1,2) - 1 = -3 < 0$, đã đúng lớp $-1$.
+
+\begin{center}
+---o0o--- \\[0.3cm]
+(Hết)
+\end{center}
+
+\begin{center}
+---o0o--- \\[0.3cm]
+(Hết Phần 1)
+\end{center}
+
+\newpage
+\section*{PHẦN 2. BÀI TẬP BỔ SUNG}
+
+\subsection*{CÂU 1. TÍNH HỆ SỐ HỒI QUY TUYẾN TÍNH ĐƠN BẰNG OLS}
+
+Cho dữ liệu doanh số theo tuần:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Tuần $x$ & Doanh số $y$ \\
+\hline
+1 & 1.2 \\
+2 & 1.8 \\
+3 & 2.6 \\
+4 & 3.2 \\
+5 & 3.8 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình hồi quy tuyến tính: $y = a_0 + a_1 x$
+
+Yêu cầu:
+
+a) Tính $\bar{x}$, $\bar{y}$, $\overline{x^2}$, $\overline{xy}$.
+
+$\bar{x} = 3$, $\bar{y} = 2.52$, $\overline{x^2} = 11$, $\overline{xy} = 8.88$
+
+b) Tính hệ số dốc:
+\[ a_1 = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - (\bar{x})^2} \]
+\[ a_1 = \frac{8.88 - 3 \cdot 2.52}{11 - 9} = \frac{1.32}{2} = 0.66 \]
+
+c) Tính hệ số chặn:
+\[ a_0 = \bar{y} - a_1 \bar{x} \]
+\[ a_0 = 2.52 - 0.66 \cdot 3 = 0.54 \]
+
+d) Viết phương trình hồi quy.
+\[ y = 0.54 + 0.66x \]
+
+e) Dự đoán doanh số tuần thứ 7 và tuần thứ 9.
+
+Tuần 7: $\hat{y} = 0.54 + 0.66 \cdot 7 = 5.16$
+
+Tuần 9: $\hat{y} = 0.54 + 0.66 \cdot 9 = 6.48$
+
+\subsection*{CÂU 2. TÍNH SAI SỐ DỰ ĐOÁN CỦA MÔ HÌNH HỒI QUY}
+
+Cho mô hình: $\hat{y} = 0.54 + 0.66x$ và dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ thực tế \\
+\hline
+1 & 1.2 \\
+2 & 1.8 \\
+3 & 2.6 \\
+4 & 3.2 \\
+5 & 3.8 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính $\hat{y}$ cho từng mẫu.
+
+$\hat{y} = (1.2,\ 1.86,\ 2.52,\ 3.18,\ 3.84)$
+
+b) Tính residual:
+\[ e_i = y_i - \hat{y}_i \]
+
+$e = (0,\ -0.06,\ 0.08,\ 0.02,\ -0.04)$
+
+c) Tính tổng bình phương sai số:
+\[ SSE = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \]
+\[ SSE = 0 + 0.0036 + 0.0064 + 0.0004 + 0.0016 = 0.012 \]
+
+d) Nhận xét mô hình có khớp tốt với dữ liệu hay không.
+
+SSE rất nhỏ (0.012) nên mô hình khớp rất tốt với dữ liệu.
+
+\subsection*{CÂU 3. Tính MAE, MSE, RMSE}
+
+Cho bảng giá trị thực tế và dự đoán:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Mẫu & $y$ thực tế & $\hat{y}$ dự đoán \\
+\hline
+1 & 80 & 75 \\
+2 & 75 & 85 \\
+3 & 90 & 88 \\
+4 & 100 & 95 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính sai số tuyệt đối của từng mẫu.
+
+$|e| = (5,\ 10,\ 2,\ 5)$
+
+b) Tính MAE:
+\[ MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i| \]
+\[ MAE = \frac{5 + 10 + 2 + 5}{4} = 5.5 \]
+
+c) Tính MSE:
+\[ MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \]
+\[ MSE = \frac{25 + 100 + 4 + 25}{4} = 38.5 \]
+
+d) Tính RMSE:
+\[ RMSE = \sqrt{MSE} \]
+\[ RMSE = \sqrt{38.5} \approx 6.2048 \]
+
+e) Nhận xét mô hình dự đoán có sai số lớn hay nhỏ.
+
+RMSE $\approx 6.2$ so với giá trị trung bình khoảng $86$ (chỉ khoảng $7\%$),
+mô hình dự đoán ở mức chấp nhận được.
+
+\subsection*{CÂU 4. TÍNH RELATIVE MSE VÀ COEFFICIENT OF VARIATION}
+
+Cho tập huấn luyện có các giá trị doanh số:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Mẫu & Doanh số thực tế \\
+\hline
+1 & 80 \\
+2 & 90 \\
+3 & 100 \\
+4 & 110 \\
+5 & 120 \\
+\hline
+\end{tabular}
+\end{center}
+
+Cho tập kiểm tra:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Mẫu & $y$ thực tế & $\hat{y}$ dự đoán \\
+\hline
+1 & 80 & 75 \\
+2 & 75 & 85 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính $\bar{y}$ từ tập huấn luyện.
+\[ \bar{y} = \frac{80 + 90 + 100 + 110 + 120}{5} = 100 \]
+
+b) Tính Relative MSE:
+\[ RelMSE = \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2} \]
+\[ RelMSE = \frac{(80-75)^2 + (75-85)^2}{(80-100)^2 + (75-100)^2} = \frac{125}{1025} \approx 0.1220 \]
+
+c) Tính hệ số biến thiên:
+\[ CV = \frac{RMSE}{\bar{y}} \]
+Với $MSE = 125/2 = 62.5$, $RMSE = \sqrt{62.5} \approx 7.9057$:
+\[ CV = \frac{7.9057}{100} \approx 0.0791 \]
+
+d) Nhận xét mô hình dựa trên RelMSE và CV.
+
+RelMSE $\approx 0.12 \ll 1$ (sai số mô hình chỉ bằng 12\% sai số của dự đoán trung bình)
+và CV $\approx 7.9\% < 10\%$ nên mô hình tốt.
+
+\subsection*{CÂU 5. HỒI QUY TUYẾN TÍNH DẠNG MA TRẬN}
+
+Cho dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ \\
+\hline
+1 & 1 \\
+2 & 3 \\
+3 & 4 \\
+4 & 8 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình:
+\[ y = a_0 + a_1 x \]
+
+Yêu cầu:
+
+a) Viết ma trận $X$ có cột đầu tiên là 1 để biểu diễn bias.
+\[ X = \begin{pmatrix}
+1 & 1 \\
+1 & 2 \\
+1 & 3 \\
+1 & 4
+\end{pmatrix} \]
+
+b) Viết vector $Y$.
+\[ Y = \begin{pmatrix} 1 \\ 3 \\ 4 \\ 8 \end{pmatrix} \]
+
+c) Tính:
+\[ X^T X \]
+\[ X^T X = \begin{pmatrix} 4 & 10 \\ 10 & 30 \end{pmatrix} \]
+
+d) Tính:
+\[ \left(X^T X\right)^{-1} \]
+\[ \left(X^T X\right)^{-1} = \begin{pmatrix} 1.5 & -0.5 \\ -0.5 & 0.2 \end{pmatrix} \]
+
+e) Tính vector hệ số:
+\[ a = (X^T X)^{-1} X^T Y \]
+Với $X^T Y = (16,\ 51)^T$:
+\[ a = \begin{pmatrix} -1.5 \\ 2.2 \end{pmatrix} \]
+
+f) Viết phương trình hồi quy tìm được.
+\[ y = -1.5 + 2.2x \]
+
+f) Viết phương trình hồi quy tìm được.
+\[ y = -1.5 + 2.2x \]
+
+\subsection*{CÂU 6. HỒI QUY TUYẾN TÍNH ĐA BIẾN}
+
+Cho dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$x_1$ & $x_2$ & $y$ \\
+\hline
+1 & 4 & 1 \\
+2 & 5 & 6 \\
+3 & 8 & 8 \\
+4 & 2 & 12 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình hồi quy đa biến:
+\[ y = a_0 + a_1 x_1 + a_2 x_2 \]
+
+Yêu cầu:
+
+a) Viết ma trận $X$ và vector $Y$.
+\[ X = \begin{pmatrix}
+1 & 1 & 4 \\
+1 & 2 & 5 \\
+1 & 3 & 8 \\
+1 & 4 & 2
+\end{pmatrix}, \qquad
+Y = \begin{pmatrix} 1 \\ 6 \\ 8 \\ 12 \end{pmatrix} \]
+
+b) Tính hệ số hồi quy bằng công thức:
+\[ a = (X^T X)^{-1} X^T Y \]
+Với $X^T X = \begin{pmatrix} 4 & 10 & 19 \\ 10 & 30 & 46 \\ 19 & 46 & 109 \end{pmatrix}$,
+$X^T Y = (27,\ 85,\ 122)^T$:
+\[ a = \left(-\frac{311}{183},\ \frac{425}{122},\ -\frac{10}{183}\right)^T \approx (-1.699,\ 3.484,\ -0.055)^T \]
+
+c) Viết mô hình hồi quy thu được.
+\[ y \approx -1.699 + 3.484\,x_1 - 0.055\,x_2 \]
+
+d) Dự đoán $y$ khi $x_1 = 5$, $x_2 = 6$.
+\[ \hat{y} = \frac{-622 + 5 \cdot 1275 + 6 \cdot (-20)}{366} = \frac{5633}{366} \approx 15.39 \]
+
+\subsection*{CÂU 7. HỒI QUY ĐA THỨC BẬC 2}
+
+Cho dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$x$ & $y$ \\
+\hline
+1 & 1 \\
+2 & 4 \\
+3 & 9 \\
+4 & 15 \\
+\hline
+\end{tabular}
+\end{center}
+
+Mô hình hồi quy đa thức bậc 2:
+\[ y = a_0 + a_1 x + a_2 x^2 \]
+
+Yêu cầu:
+
+a) Lập bảng tính các cột:
+\[ x,\ y,\ x^2,\ x^3,\ x^4,\ xy,\ x^2 y \]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+$x$ & $y$ & $x^2$ & $x^3$ & $x^4$ & $xy$ & $x^2 y$ \\
+\hline
+1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+2 & 4 & 4 & 8 & 16 & 8 & 16 \\
+3 & 9 & 9 & 27 & 81 & 27 & 81 \\
+4 & 15 & 16 & 64 & 256 & 60 & 240 \\
+\hline
+\end{tabular}
+\end{center}
+
+b) Tính các tổng:
+\[ \sum x,\ \sum y,\ \sum x^2,\ \sum x^3,\ \sum x^4,\ \sum xy,\ \sum x^2 y \]
+\[ \sum x = 10, \quad \sum y = 29, \quad \sum x^2 = 30, \quad \sum x^3 = 100, \]
+\[ \sum x^4 = 354, \quad \sum xy = 96, \quad \sum x^2 y = 338 \]
+
+c) Lập hệ phương trình chuẩn:
+\[ \begin{bmatrix}
+n & \sum x & \sum x^2 \\
+\sum x & \sum x^2 & \sum x^3 \\
+\sum x^2 & \sum x^3 & \sum x^4
+\end{bmatrix}
+\begin{bmatrix} a_0 \\ a_1 \\ a_2 \end{bmatrix} =
+\begin{bmatrix} \sum y \\ \sum xy \\ \sum x^2 y \end{bmatrix} \]
+\[ \begin{bmatrix}
+4 & 10 & 30 \\
+10 & 30 & 100 \\
+30 & 100 & 354
+\end{bmatrix}
+\begin{bmatrix} a_0 \\ a_1 \\ a_2 \end{bmatrix} =
+\begin{bmatrix} 29 \\ 96 \\ 338 \end{bmatrix} \]
+
+d) Giải hệ để tìm $a_0, a_1, a_2$.
+\[ a_0 = -0.75, \qquad a_1 = 0.95, \qquad a_2 = 0.75 \]
+
+e) Viết phương trình hồi quy đa thức.
+\[ y = -0.75 + 0.95x + 0.75x^2 \]
+
+f) Dự đoán $y$ khi $x = 5$.
+\[ \hat{y} = -0.75 + 0.95 \cdot 5 + 0.75 \cdot 25 = 22.75 \]
+
+\subsection*{CÂU 8. LOGISTIC REGRESSION -- TÍNH XÁC SUẤT VÀ PHÂN LỚP}
+
+Cho mô hình Logistic Regression:
+\[ p(x) = \frac{1}{1 + \exp(-(a_0 + a_1 x))} \]
+
+Biết:
+\[ a_0 = -4, \quad a_1 = 0.08 \]
+Trong đó $x$ là điểm thi đầu vào của sinh viên.
+
+Yêu cầu:
+
+a) Tính xác suất đậu khi $x = 40$.
+
+$z = -4 + 0.08 \cdot 40 = -0.8$, $p = 1/(1 + e^{0.8}) \approx 0.3100$
+
+b) Tính xác suất đậu khi $x = 60$.
+
+$z = -4 + 0.08 \cdot 60 = 0.8$, $p = 1/(1 + e^{-0.8}) \approx 0.6900$
+
+c) Tính xác suất đậu khi $x = 80$.
+
+$z = -4 + 0.08 \cdot 80 = 2.4$, $p = 1/(1 + e^{-2.4}) \approx 0.9168$
+
+d) Với ngưỡng phân lớp 0.5, xác định sinh viên ở mỗi trường hợp là ``Đậu'' hay ``Rớt''.
+
+$x = 40$: $0.31 < 0.5$ nên Rớt; $x = 60$: $0.69 \geq 0.5$ nên Đậu;
+$x = 80$: $0.92 \geq 0.5$ nên Đậu.
+
+\subsection*{CÂU 9. TÍNH ODDS VÀ LOG-ODDS}
+
+Cho xác suất một email là spam:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Email & $p$ \\
+\hline
+A & 0.2 \\
+B & 0.5 \\
+C & 0.8 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính odds:
+\[ odds = \frac{p}{1-p} \]
+
+$odds_A = 0.2/0.8 = 0.25$, $odds_B = 0.5/0.5 = 1$, $odds_C = 0.8/0.2 = 4$
+
+b) Tính log-odds:
+\[ logit(p) = \log\frac{p}{1-p} \]
+
+$logit_A = \log 0.25 \approx -1.3863$, $logit_B = \log 1 = 0$, $logit_C = \log 4 \approx 1.3863$
+
+c) Nhận xét: khi $p$ tăng thì odds và log-odds thay đổi như thế nào?
+
+Cả odds và log-odds đều tăng theo $p$ (odds tăng từ 0.25 lên 4, log-odds tăng từ $-1.39$ lên $1.39$).
+
+\subsection*{CÂU 10. LOGISTIC REGRESSION VỚI HAI BIẾN ĐẦU VÀO}
+
+Cho mô hình:
+\[ z = -3 + 0.04x_1 + 0.06x_2 \qquad p = \frac{1}{1 + e^{-z}} \]
+Trong đó:
+\begin{itemize}
+  \item $x_1$: điểm Toán
+  \item $x_2$: điểm Tiếng Anh
+  \item $p$: xác suất trúng tuyển
+\end{itemize}
+
+Cho dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Sinh viên & $x_1$ & $x_2$ \\
+\hline
+A & 60 & 50 \\
+B & 70 & 80 \\
+C & 40 & 45 \\
+D & 90 & 85 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính $z$ cho từng sinh viên.
+
+$z_A = -3 + 0.04 \cdot 60 + 0.06 \cdot 50 = 2.4$
+
+$z_B = -3 + 0.04 \cdot 70 + 0.06 \cdot 80 = 4.6$
+
+$z_C = -3 + 0.04 \cdot 40 + 0.06 \cdot 45 = 1.3$
+
+$z_D = -3 + 0.04 \cdot 90 + 0.06 \cdot 85 = 5.7$
+
+b) Tính xác suất trúng tuyển $p$.
+
+$p_A \approx 0.9168$, $p_B \approx 0.9900$, $p_C \approx 0.7858$, $p_D \approx 0.9967$
+
+c) Với ngưỡng 0.5, phân loại từng sinh viên.
+
+Cả 4 sinh viên đều có $p \geq 0.5$ nên đều trúng tuyển.
+
+d) Nếu nhà trường chỉ nhận sinh viên có xác suất từ 0.8 trở lên, sinh viên nào được nhận?
+
+A ($0.92$), B ($0.99$), D ($0.997$) được nhận; C ($0.79 < 0.8$) không được nhận.
+
+\subsection*{CÂU 11. Tính hệ số xác định $\mathbf{R^2}$}
+
+Cho bảng dữ liệu:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Mẫu & $y$ thực tế & $\hat{y}$ dự đoán \\
+\hline
+1 & 10 & 12 \\
+2 & 15 & 14 \\
+3 & 20 & 19 \\
+4 & 25 & 27 \\
+5 & 30 & 28 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Tính $\bar{y}$.
+\[ \bar{y} = \frac{10 + 15 + 20 + 25 + 30}{5} = 20 \]
+
+b) Tính tổng biến thiên toàn phần:
+\[ SST = \sum(y_i - \bar{y})^2 \]
+\[ SST = 100 + 25 + 0 + 25 + 100 = 250 \]
+
+c) Tính tổng sai số chưa giải thích:
+\[ SSE = \sum(y_i - \hat{y}_i)^2 \]
+\[ SSE = 4 + 1 + 1 + 4 + 4 = 14 \]
+
+d) Tính hệ số xác định:
+\[ R^2 = 1 - \frac{SSE}{SST} \]
+\[ R^2 = 1 - \frac{14}{250} = 0.944 \]
+
+e) Giải thích ý nghĩa của giá trị $R^2$.
+
+$R^2 = 0.944$ nghĩa là mô hình giải thích được $94.4\%$ biến thiên của dữ liệu —
+mô hình rất tốt.
+
+\subsection*{CÂU 12. RIDGE REGRESSION -- TÍNH HÀM MẤT MÁT CÓ PHẠT}
+
+Cho mô hình hồi quy có:
+\[ SSE = 40 \]
+Hệ số dốc:
+\[ a_1 = 3 \]
+Tham số phạt:
+\[ \lambda = 2 \]
+Ridge loss được tính:
+\[ Loss_{Ridge} = SSE + \lambda a_1^2 \]
+
+Yêu cầu:
+
+a) Tính penalty của Ridge Regression.
+\[ \text{Penalty} = \lambda a_1^2 = 2 \cdot 3^2 = 18 \]
+
+b) Tính tổng loss.
+\[ Loss_{Ridge} = 40 + 18 = 58 \]
+
+c) Nếu $\lambda$ tăng lên 5 thì loss thay đổi như thế nào?
+
+Penalty $= 5 \cdot 9 = 45$, loss $= 40 + 45 = 85$: loss tăng thêm 27.
+
+d) Giải thích vì sao Ridge Regression có thể giúp giảm overfitting.
+
+Phạt $L_2$ kéo các hệ số về gần 0, hạn chế mô hình quá khớp nhiễu của tập huấn luyện.
+
+\subsection*{CÂU 13. LASSO REGRESSION -- TÍNH HÀM MẤT MÁT CÓ PHẠT}
+
+Cho mô hình có:
+\[ SSE = 40 \]
+Hệ số:
+\[ a_1 = 3, \quad a_2 = -2, \quad a_3 = 0.5 \]
+Tham số phạt:
+\[ \lambda = 2 \]
+LASSO loss:
+\[ Loss_{LASSO} = SSE + \lambda(|a_1| + |a_2| + |a_3|) \]
+
+Yêu cầu:
+
+a) Tính tổng độ lớn tuyệt đối của các hệ số.
+\[ |3| + |-2| + |0.5| = 5.5 \]
+
+b) Tính penalty LASSO.
+\[ \text{Penalty} = 2 \cdot 5.5 = 11 \]
+
+c) Tính tổng loss.
+\[ Loss_{LASSO} = 40 + 11 = 51 \]
+
+d) Giải thích vì sao LASSO có thể dùng để chọn đặc trưng.
+
+Phạt $L_1$ đẩy các hệ số yếu về đúng bằng 0, tức tự động loại biến không cần thiết.
+
+\subsection*{CÂU 14. ELASTIC NET -- TÍNH LOSS KẾT HỢP RIDGE VÀ LASSO}
+
+Cho:
+\[ SSE = 50 \]
+Các hệ số:
+\[ a_1 = 2, \quad a_2 = -1, \quad a_3 = 3 \]
+Cho:
+\[ \lambda_1 = 1, \quad \lambda_2 = 0.5 \]
+Elastic Net loss:
+\[ Loss = SSE + \lambda_1 \sum |a_i| + \lambda_2 \sum a_i^2 \]
+
+Yêu cầu:
+
+a) Tính thành phần LASSO:
+\[ \lambda_1 \sum |a_i| \]
+\[ 1 \cdot (2 + 1 + 3) = 6 \]
+
+b) Tính thành phần Ridge:
+\[ \lambda_2 \sum a_i^2 \]
+\[ 0.5 \cdot (4 + 1 + 9) = 7 \]
+
+c) Tính tổng Elastic Net loss.
+\[ Loss = 50 + 6 + 7 = 63 \]
+
+d) Khi nào nên dùng Elastic Net thay vì chỉ dùng Ridge hoặc LASSO?
+
+Khi dữ liệu có nhiều biến tương quan cao: LASSO đơn độc chọn bừa một biến trong nhóm,
+Ridge giữ hết nhưng không chọn biến; Elastic Net vừa chọn nhóm vừa ổn định hệ số.
+
+\subsection*{CÂU 15. BÀI TẬP TỔNG HỢP}
+
+Một cửa hàng ghi nhận dữ liệu doanh số:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Tuần & Chi phí quảng cáo $x$ & Doanh số $y$ \\
+\hline
+1 & 2 & 20 \\
+2 & 3 & 25 \\
+3 & 5 & 35 \\
+4 & 7 & 45 \\
+5 & 9 & 55 \\
+\hline
+\end{tabular}
+\end{center}
+
+Yêu cầu:
+
+a) Xây dựng mô hình hồi quy tuyến tính:
+\[ y = a_0 + a_1 x \]
+
+Với $\bar{x} = 5.2$, $\bar{y} = 36$:
+\[ a_1 = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - \bar{x}^2}
+      = \frac{220 - 5.2 \cdot 36}{33.6 - 5.2^2}
+      = \frac{32.8}{6.56} = 5 \]
+\[ a_0 = 36 - 5 \cdot 5.2 = 10 \]
+\[ y = 10 + 5x \]
+
+b) Dự đoán doanh số khi chi phí quảng cáo là $x = 10$.
+\[ \hat{y} = 10 + 5 \cdot 10 = 60 \]
+
+c) Tính MAE, MSE, RMSE trên tập dữ liệu đã cho.
+
+Mô hình khớp khít cả 5 điểm nên $MAE = 0$, $MSE = 0$, $RMSE = 0$.
+
+d) Tính $R^2$.
+
+$SSE = 0$ nên $R^2 = 1 - 0/SST = 1$.
+
+e) Nhận xét mối quan hệ giữa chi phí quảng cáo và doanh số.
+
+Quan hệ tuyến tính hoàn hảo theo chiều thuận: mỗi đơn vị chi phí tăng thêm
+mang lại 5 đơn vị doanh số ($R^2 = 1$).
+
+\begin{center}
+---o0o--- \\[0.3cm]
+(Hết)
+\end{center}
+
+\end{document}
