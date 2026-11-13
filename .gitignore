@@ -48,3 +48,6 @@ _preview.pdf
 # Word: file tam khi mo/luu
 ~$*.docx
 mso*.tmp
+
+**/data
+**/data/**
