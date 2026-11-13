@@ -29,6 +29,9 @@ Lab02/experiments/figures/
 # BTL01: toan bo output sinh ra khi chay notebook (du lieu, hinh, log, weights)
 BTL01/outputs/
 
+# Thu muc du lieu cua cac bai (dataset lon, khong dua vao git)
+**/data/
+
 # Weights va mang so hoc (tai tao duoc)
 *.pt
 *.npy
