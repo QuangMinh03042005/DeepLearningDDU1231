@@ -1,0 +1,31 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  innode/.style={circle, draw, thick, fill=blue!12, minimum size=8mm, inner sep=0pt, font=\small},
+  ne/.style={circle, draw, thick, fill=orange!25, minimum size=11mm, inner sep=0pt, font=\small},
+  e/.style={->, thick}
+]
+\node[innode] (x1) at (0,2.8) {$x_1$};
+\node[innode] (x2) at (0,1.5) {$x_2$};
+\node[innode] (b)  at (0,0.2) {$b$};
+\node[ne] (n1) at (4.2,2.3) {$1$};
+\node[ne] (n2) at (4.2,0.7) {$2$};
+\node (y1) at (6.6,2.3) {$\hat{y}_1$};
+\node (y2) at (6.6,0.7) {$\hat{y}_2$};
+\draw[->, thick] (4.75,2.3) -- (6.2,2.3);
+\draw[->, thick] (4.75,0.7) -- (6.2,0.7);
+
+\foreach \s in {x1,x2,b} {
+  \draw[e] (\s) -- (n1);
+  \draw[e] (\s) -- (n2);
+}
+\node[font=\small] at (2.6,3.35) {$w_{11}, w_{21}, w_{bias,1}$};
+\node[font=\small] at (2.6,-0.75) {$w_{12}, w_{22}, w_{bias,2}$};
+\end{tikzpicture}
+\end{document}
