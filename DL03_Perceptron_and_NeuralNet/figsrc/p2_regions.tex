@@ -1,0 +1,45 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[x=1.55cm, y=1.55cm, >={Stealth[length=2mm]}]
+
+% ================= PANEL A: CÂU 1 =================
+\begin{scope}[shift={(0,0)}]
+  \draw[->, thick] (-3.2,0) -- (2.3,0) node[right] {$x_1$};
+  \draw[->, thick] (0,-2.6) -- (0,2.6) node[above] {$x_2$};
+
+  \draw[blue, thick] (-0.5,-2.6) -- (-0.5,2.6);
+  \node[blue, font=\scriptsize, anchor=west] at (-0.38,2.15) {$v_1=0$};
+
+  \draw[red, thick] (-3.2,1.1) -- (2.3,-1.65);
+  \node[red, font=\scriptsize] at (1.5,-0.95) {$v_2=0$};
+
+  \draw[green!55!black, thick] (-3.2,1.067) -- (2.3,-0.767);
+  \node[green!55!black, font=\scriptsize] at (-2.55,0.45) {$v_3=0$};
+
+  \node[font=\small] at (0,-3.15) {\textbf{(a) Câu 1}};
+\end{scope}
+
+% ================= PANEL B: CÂU 2 =================
+\begin{scope}[shift={(6.6,0)}]
+  \draw[->, thick] (-3.2,0) -- (2.3,0) node[right] {$x_1$};
+  \draw[->, thick] (0,-2.6) -- (0,2.6) node[above] {$x_2$};
+
+  \draw[blue, thick] (0.5,-2.6) -- (0.5,2.6);
+  \node[blue, font=\scriptsize, anchor=west] at (0.62,2.15) {$v_1=0$};
+
+  \draw[red, thick] (-3.2,2.1) -- (2.3,-0.65);
+  \node[red, font=\scriptsize] at (1.5,0.15) {$v_2=0$};
+
+  \draw[green!55!black, thick] (-3.2,1.4) -- (2.3,-0.433);
+  \node[green!55!black, font=\scriptsize] at (-2.4,1.05) {$v_3=0$};
+
+  \node[font=\small] at (0,-3.15) {\textbf{(b) Câu 2 (bias $=-1$)}};
+\end{scope}
+
+\end{tikzpicture}
+\end{document}

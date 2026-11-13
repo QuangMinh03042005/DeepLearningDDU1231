@@ -1,0 +1,40 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  innode/.style={circle, draw, thick, fill=blue!12, minimum size=8mm, inner sep=0pt, font=\small},
+  ne/.style={circle, draw, thick, fill=orange!25, minimum size=16mm, inner sep=1pt},
+  e/.style={->, thick}
+]
+% dau vao
+\node[innode] (x1) at (0,4.2) {$x_1$};
+\node[innode] (x2) at (0,2.8) {$x_2$};
+\node[innode] (x3) at (0,1.4) {$x_3$};
+\node[innode] (b)  at (0,0.0) {$1$};
+
+% noron
+\node[ne] (n) at (5.2,2.1) {};
+\node[font=\small, align=center] at (5.2,2.35) {$\displaystyle\sum$};
+\node[font=\scriptsize, align=center] at (5.2,1.75) {hàm bước};
+
+% dau ra
+\node (y) at (8.2,2.1) {$y$};
+\draw[->, thick] (6.6,2.1) -- (7.8,2.1);
+
+% lien ket + trong so
+\draw[e] (x1) -- node[above, font=\small, pos=0.45] {$w_1=2$} (n);
+\draw[e] (x2) -- node[above, font=\small, pos=0.45] {$w_2=1$} (n);
+\draw[e] (x3) -- node[below, font=\small, pos=0.45] {$w_3=1$} (n);
+\draw[e] (b)  -- node[below, font=\small, pos=0.45] {$b=-24$} (n);
+
+% chu thich
+\node[font=\small, anchor=west, align=left] at (-1.2,-1.1)
+  {$y=\varphi(2x_1+x_2+x_3-24)$,\quad
+   $\varphi(v)=\begin{cases}1, & v\ge 0\\ 0, & v<0\end{cases}$};
+\end{tikzpicture}
+\end{document}

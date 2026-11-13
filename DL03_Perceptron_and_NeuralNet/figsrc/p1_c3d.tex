@@ -1,0 +1,30 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[x=3.9cm, y=3.9cm, >={Stealth[length=2mm]}]
+  % truc
+  \draw[->, thick] (-0.12,0) -- (1.42,0) node[right] {$x_1$};
+  \draw[->, thick] (0,-0.55) -- (0,1.42) node[above] {$x_2$};
+
+  % duong ban dau x2 = 0.5
+  \draw[blue, thick, dashed] (-0.08,0.5) -- (1.38,0.5);
+  \node[blue, font=\small, anchor=south west] at (0.72,0.52) {$x_2=0.5$ (ban đầu)};
+
+  % duong sau cap nhat: x2 = 0.1 - 0.4 x1
+  \draw[red, thick] (-0.12,0.148) -- (1.42,-0.468);
+  \node[red, font=\small, rotate=-21.8, fill=white, inner sep=1pt] at (0.62,-0.10) {$0.4x_1+x_2=0.1$};
+
+  % diem du lieu
+  \fill (0,0) circle (2.2pt) node[below=2pt] {a};
+  \fill (1,0) circle (2.2pt) node[below right=1pt] {b};
+  \fill (0,1) circle (2.2pt) node[left=3pt] {c};
+  \fill (1,1) circle (2.2pt) node[above right=1pt] {d};
+
+  % chu thich nhan
+  \node[font=\scriptsize, anchor=north west] at (1.0,-0.62) {a: $t=-1$; \; b, c, d: $t=+1$};
+\end{tikzpicture}
+\end{document}
