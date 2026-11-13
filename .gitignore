@@ -25,3 +25,26 @@ Lab02/experiments/**/*.pt
 Lab02/experiments/oof/*.npy
 Lab02/experiments/processed/
 Lab02/experiments/figures/
+
+# BTL01: toan bo output sinh ra khi chay notebook (du lieu, hinh, log, weights)
+BTL01/outputs/
+
+# Weights va mang so hoc (tai tao duoc)
+*.pt
+*.npy
+
+# File nop bai da dong goi
+*.zip
+
+# LaTeX: file tam khi bien dich
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+compile.log
+_preview.pdf
+
+# Word: file tam khi mo/luu
+~$*.docx
+mso*.tmp
