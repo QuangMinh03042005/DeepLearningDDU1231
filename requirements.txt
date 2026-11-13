@@ -1,8 +1,10 @@
-# Môi trường cho Lab01 + Lab02 (CPU, Python 3.12)
+# Môi trường chung cho các lab Học sâu (CPU, Python 3.12)
 # Cài đặt: .\.venv\Scripts\pip install -r requirements.txt
-# torch CPU lấy từ PyTorch index:
+# torch/torchvision bản CPU lấy từ PyTorch index:
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
+torchvision
+pillow
 numpy
 pandas
 scikit-learn
