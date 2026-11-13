@@ -1,0 +1,57 @@
+\documentclass[border=6pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  inp/.style={circle, draw, thick, fill=blue!12, minimum size=8mm, inner sep=1pt, font=\small},
+  op/.style={rectangle, draw, thick, rounded corners=2pt, fill=orange!20, minimum height=9mm, inner sep=4pt, font=\small},
+  loss/.style={rectangle, draw, thick, rounded corners=2pt, fill=red!15, minimum height=9mm, inner sep=4pt, font=\small},
+  fwd/.style={->, thick, blue!70!black},
+  bwd/.style={->, thick, dashed, red!80!black}
+]
+% ---- nút đầu vào ----
+\node[inp] (x)  at (0,5.2)   {$x_i$};
+\node[inp] (t1) at (0,3.6)   {$\theta_1$};
+\node[inp] (t0) at (0,2.0)   {$\theta_0$};
+
+% ---- nút tính toán ----
+\node[op]   (z)  at (3.8,3.6) {$z_i=\theta_0+\theta_1 x_i$};
+\node[op]   (yh) at (7.2,3.6) {$\hat{y}_i=\sigma(z_i)$};
+\node[loss] (L)  at (10.6,3.6){$L_i$ (BCE)};
+\node[inp]  (y)  at (10.6,1.2) {$y_i$};
+
+% ---- lan truyền tiến ----
+\draw[fwd] (x)  -- (z);
+\draw[fwd] (t1) -- (z);
+\draw[fwd] (t0) -- (z);
+\draw[fwd] (z)  -- (yh);
+\draw[fwd] (yh) -- (L);
+\draw[fwd] (y)  -- (L);
+
+% ---- lan truyền ngược (cung phía trên) ----
+\draw[bwd] (L.north)  to[out=140,in=40] (yh.north);
+\draw[bwd] (yh.north) to[out=140,in=40] (z.north);
+\draw[bwd] (z.west) to[out=180,in=0]  (t1.east);
+\draw[bwd] (z.west) to[out=200,in=-10] (t0.east);
+
+% ---- nhãn đạo hàm ----
+\node[red!80!black, font=\scriptsize] at (8.9,5.15)
+  {$\dfrac{\partial L_i}{\partial \hat{y}_i}=\dfrac{-y_i}{\hat{y}_i}+\dfrac{1-y_i}{1-\hat{y}_i}$};
+\node[red!80!black, font=\scriptsize] at (5.5,5.15)
+  {$\dfrac{\partial L_i}{\partial z_i}=\hat{y}_i-y_i$};
+\node[red!80!black, font=\scriptsize, align=left] at (2.6,0.95)
+  {$\dfrac{\partial L_i}{\partial \theta_1}=(\hat{y}_i-y_i)\,x_i$\\[4pt]
+   $\dfrac{\partial L_i}{\partial \theta_0}=\hat{y}_i-y_i$};
+
+% ---- chú giải ----
+\draw[fwd] (0.6,-1.0) -- (1.7,-1.0);
+\node[font=\small, anchor=west] at (1.9,-1.0) {lan truyền tiến};
+\draw[bwd] (0.6,-1.8) -- (1.7,-1.8);
+\node[font=\small, anchor=west] at (1.9,-1.8) {lan truyền ngược};
+
+\end{tikzpicture}
+\end{document}

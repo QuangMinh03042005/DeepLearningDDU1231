@@ -1,0 +1,51 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{amsmath}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\begin{document}
+\begin{tikzpicture}[
+  >={Stealth[length=2.2mm]},
+  inp/.style={circle, draw, thick, fill=blue!12, minimum size=8mm, inner sep=1pt, font=\small},
+  op/.style={rectangle, draw, thick, rounded corners=2pt, fill=orange!20, minimum height=8mm, inner sep=4pt, font=\small},
+  outnode/.style={rectangle, draw, very thick, rounded corners=2pt, fill=red!15, minimum height=9mm, inner sep=5pt, font=\small},
+  e/.style={->, thick, gray!70!black}
+]
+% ---- nút đầu vào ----
+\node[inp] (a) at (0,6)    {$a$};
+\node[inp] (b) at (3.6,6)  {$b$};
+\node[inp] (c) at (7.2,6)  {$c$};
+\node[inp] (d) at (9.8,6)  {$d$};
+
+% ---- nút phép toán ----
+\node[op] (u1) at (0,4.2)    {$u_1=3a$};
+\node[op] (u2) at (3.6,4.2)  {$u_2=4b$};
+\node[op] (u3) at (8.5,4.2)  {$u_3=cd$};
+\node[op] (u4) at (8.5,2.4)  {$u_4=5u_3$};
+\node[op] (u5) at (5.2,1.2)  {$u_5=u_2+u_4$};
+\node[op] (u6) at (5.2,-0.6) {$u_6=2u_5$};
+\node[outnode] (J) at (1.8,-2.2) {$J=u_1+u_6$};
+
+% ---- cạnh phụ thuộc ----
+\draw[e] (a) -- (u1);
+\draw[e] (b) -- (u2);
+\draw[e] (c) -- (u3);
+\draw[e] (d) -- (u3);
+\draw[e] (u3) -- (u4);
+\draw[e] (u2) -- (u5);
+\draw[e] (u4) -- (u5);
+\draw[e] (u5) -- (u6);
+\draw[e] (u1) -- (J);
+\draw[e] (u6) -- (J);
+
+% ---- chú giải ----
+\node[inp, minimum size=6mm] (lg1) at (0,-3.6) {};
+\node[font=\small, anchor=west] at (0.7,-3.6) {nút đầu vào};
+\node[op, minimum height=6mm] (lg2) at (4.2,-3.6) {};
+\node[font=\small, anchor=west] at (5.0,-3.6) {nút phép toán};
+\node[outnode, minimum height=6mm] (lg3) at (9.2,-3.6) {};
+\node[font=\small, anchor=west] at (10.1,-3.6) {đầu ra};
+
+\end{tikzpicture}
+\end{document}
