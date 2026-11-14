@@ -1,0 +1,112 @@
+\documentclass[border=10pt]{standalone}
+
+% --- Tiếng Việt + mã UTF-8 ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Vẽ hình ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc}
+\usepackage{graphicx}
+
+% Vẽ một "chồng" bản đồ đặc trưng (feature map)
+% #1 x gốc, #2 y gốc, #3 rộng, #4 cao, #5 số tấm, #6 màu
+\newcommand{\layer}[6]{%
+  \foreach \i in {#5,...,1}{%
+    \pgfmathsetmacro{\ox}{(#5-\i)*0.085}%  tấm phía sau dịch sang phải
+    \pgfmathsetmacro{\oy}{-(#5-\i)*0.045}% và xuống dưới
+    \pgfmathsetmacro{\sh}{0.24*(#3)}%      độ nghiêng của tấm
+    \fill[#6!18]
+      ({#1+\ox},{#2+\oy}) --
+      ({#1+\ox+#3},{#2+\oy+\sh}) --
+      ({#1+\ox+#3},{#2+\oy+\sh+#4}) --
+      ({#1+\ox},{#2+\oy+#4}) -- cycle;
+    \draw[#6!65!black, line width=0.5pt]
+      ({#1+\ox},{#2+\oy}) --
+      ({#1+\ox+#3},{#2+\oy+\sh}) --
+      ({#1+\ox+#3},{#2+\oy+\sh+#4}) --
+      ({#1+\ox},{#2+\oy+#4}) -- cycle;
+  }%
+}
+
+\begin{document}
+
+\begin{tikzpicture}[
+  ten/.style={font=\footnotesize\bfseries, text=teal!65!black},
+  dim/.style={font=\scriptsize, text=black!70},
+]
+
+% ================= ẢNH ĐẦU VÀO =================
+\begin{scope}[xslant=0.24]
+  \node[inner sep=0, anchor=south west] at (0, 0)
+    {\includegraphics[width=2.3cm]{mau_khuon_mat.png}};
+\end{scope}
+\node[ten] at (1.15, 2.75) {Ảnh vào};
+\node[dim] at (1.15, -0.35) {48$\times$48$\times$1};
+
+% ================= KHỐI 1 =================
+\layer{3.00}{0}{2.30}{2.30}{3}{blue}
+\node[ten] at (3.90, 2.85) {Khối 1};
+\node[dim] at (4.00, -0.35) {48$\times$48$\times$32};
+
+% ================= POOL 1 =================
+\layer{6.30}{0}{1.15}{1.15}{2}{red}
+\node[ten] at (6.70, 1.60) {Pool 1};
+\node[dim] at (6.70, -0.35) {24$\times$24$\times$32};
+
+% ================= KHỐI 2 =================
+\layer{8.30}{0}{1.15}{1.15}{4}{blue}
+\node[ten] at (8.70, 1.60) {Khối 2};
+\node[dim] at (8.70, -0.35) {24$\times$24$\times$64};
+
+% ================= POOL 2 =================
+\layer{10.50}{0}{0.58}{0.58}{2}{red}
+\node[ten] at (10.70, 0.95) {Pool 2};
+\node[dim] at (10.70, -0.35) {12$\times$12$\times$64};
+
+% ================= KHỐI 3 =================
+\layer{12.10}{0}{0.58}{0.58}{5}{blue}
+\node[ten] at (12.30, 0.95) {Khối 3};
+\node[dim] at (12.30, -0.35) {12$\times$12$\times$128};
+
+% ================= POOL 3 =================
+\layer{13.70}{0}{0.32}{0.32}{2}{red}
+\node[ten] at (13.90, 0.65) {Pool 3};
+\node[dim] at (13.90, -0.35) {6$\times$6$\times$128};
+
+% ================= GAP =================
+\layer{14.90}{0}{0.22}{0.32}{2}{green}
+\node[ten] at (15.05, 1.10) {GAP};
+\node[dim] at (15.05, -0.35) {128};
+
+% ================= FC =================
+\draw[green!65!black, line width=0.5pt, fill=green!20]
+  (15.60, 0.13) -- (16.45, 0.19) -- (16.45, 0.31) -- (15.60, 0.25) -- cycle;
+\node[ten] at (16.02, 0.62) {FC};
+\node[dim] at (16.02, -0.35) {7};
+
+% ================= ĐẦU RA =================
+\draw[green!65!black, line width=0.5pt, fill=green!20]
+  (16.85, 0.13) -- (17.70, 0.18) -- (17.70, 0.30) -- (16.85, 0.25) -- cycle;
+\node[ten] at (17.28, 0.62) {Đầu ra};
+\node[dim] at (17.28, -0.35) {softmax};
+
+% ================= CHÚ THÍCH =================
+\begin{scope}[shift={(3.6, -1.15)}]
+  \fill[blue!18, draw=blue!65!black, line width=0.5pt]
+    (0, 0) -- (0.34, 0.09) -- (0.34, 0.30) -- (0, 0.21) -- cycle;
+  \node[anchor=west, font=\scriptsize] at (0.45, 0.15) {tích chập $3{\times}3$ + BN + ReLU};
+
+  \fill[red!18, draw=red!65!black, line width=0.5pt]
+    (5.4, 0) -- (5.74, 0.09) -- (5.74, 0.30) -- (5.4, 0.21) -- cycle;
+  \node[anchor=west, font=\scriptsize] at (5.85, 0.15) {max pooling $2{\times}2$};
+
+  \fill[green!20, draw=green!65!black, line width=0.5pt]
+    (9.5, 0) -- (9.84, 0.09) -- (9.84, 0.30) -- (9.5, 0.21) -- cycle;
+  \node[anchor=west, font=\scriptsize] at (9.95, 0.15) {GAP / fully connected};
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}
