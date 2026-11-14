@@ -1,0 +1,2 @@
+exp_id,mo_hinh,do_dropout,optimizer,lr,batch,augment,epochs_chay,epoch_tot_nhat,val_acc,test_acc,giay,ghi_chu
+BASE,CNN 32-64-128,0.3,Adam,0.001,64,False,18,15,0.5385,0.5237,667.5,"baseline, không augmentation"
