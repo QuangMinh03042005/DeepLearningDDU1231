@@ -42,13 +42,13 @@
 % ================= ẢNH ĐẦU VÀO =================
 \begin{scope}[xslant=0.24]
   \node[inner sep=0, anchor=south west] at (0, 0)
-    {\includegraphics[width=2.3cm]{mau_khuon_mat.png}};
+    {\includegraphics[width=2.0cm]{mau_khuon_mat.png}};
 \end{scope}
-\node[ten] at (1.15, 2.75) {Ảnh vào};
-\node[dim] at (1.15, -0.35) {48$\times$48$\times$1};
+\node[ten] at (1.00, 2.47) {Ảnh vào};
+\node[dim] at (1.00, -0.35) {48$\times$48$\times$1};
 
 % ================= KHỐI 1 =================
-\layer{3.00}{0}{2.30}{2.30}{3}{blue}
+\layer{3.05}{0}{2.30}{2.30}{3}{blue}
 \node[ten] at (3.90, 2.85) {Khối 1};
 \node[dim] at (4.00, -0.35) {48$\times$48$\times$32};
 
@@ -63,14 +63,14 @@
 \node[dim] at (8.70, -0.35) {24$\times$24$\times$64};
 
 % ================= POOL 2 =================
-\layer{10.50}{0}{0.58}{0.58}{2}{red}
-\node[ten] at (10.70, 0.95) {Pool 2};
-\node[dim] at (10.70, -0.35) {12$\times$12$\times$64};
+\layer{10.35}{0}{0.58}{0.58}{2}{red}
+\node[ten] at (10.55, 0.95) {Pool 2};
+\node[dim] at (10.55, -0.35) {12$\times$12$\times$64};
 
 % ================= KHỐI 3 =================
-\layer{12.10}{0}{0.58}{0.58}{5}{blue}
-\node[ten] at (12.30, 0.95) {Khối 3};
-\node[dim] at (12.30, -0.35) {12$\times$12$\times$128};
+\layer{12.25}{0}{0.58}{0.58}{5}{blue}
+\node[ten] at (12.45, 0.95) {Khối 3};
+\node[dim] at (12.45, -0.35) {12$\times$12$\times$128};
 
 % ================= POOL 3 =================
 \layer{13.70}{0}{0.32}{0.32}{2}{red}
@@ -96,12 +96,12 @@
 
 % ================= ĐƯỜNG NỐI GIỮA CÁC LỚP =================
 % Nối từ mép phải (giữa chiều cao) của chồng trước sang mép trái của chồng sau
-\draw[arr] (2.58, 1.15) -- (2.95, 1.15);   % ảnh vào -> khối 1
-\draw[arr] (5.52, 1.70) -- (6.25, 0.60);   % khối 1  -> pool 1
+\draw[arr] (2.26, 1.15) -- (3.00, 1.15);   % ảnh vào -> khối 1
+\draw[arr] (5.57, 1.70) -- (6.25, 0.60);   % khối 1  -> pool 1
 \draw[arr] (7.54, 0.85) -- (8.25, 0.60);   % pool 1  -> khối 2
-\draw[arr] (9.71, 0.85) -- (10.45, 0.31);  % khối 2  -> pool 2
-\draw[arr] (11.17, 0.43) -- (12.05, 0.31); % pool 2  -> khối 3
-\draw[arr] (13.02, 0.43) -- (13.65, 0.18); % khối 3  -> pool 3
+\draw[arr] (9.71, 0.85) -- (10.30, 0.31);  % khối 2  -> pool 2
+\draw[arr] (11.02, 0.43) -- (12.20, 0.31); % pool 2  -> khối 3
+\draw[arr] (13.17, 0.43) -- (13.65, 0.18); % khối 3  -> pool 3
 \draw[arr] (14.11, 0.25) -- (14.85, 0.18); % pool 3  -> GAP
 \draw[arr] (15.21, 0.22) -- (15.55, 0.22); % GAP     -> FC
 \draw[arr] (16.45, 0.24) -- (16.80, 0.24); % FC      -> đầu ra
