@@ -1,0 +1,126 @@
+\documentclass[border=10pt]{standalone}
+
+% --- Tiếng Việt + mã UTF-8 ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% --- Vẽ hình ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc}
+
+\begin{document}
+
+\begin{tikzpicture}[
+  >={Stealth[length=2.4mm, width=1.7mm]},
+  arr/.style={->, very thick, draw=black!65},
+  block/.style={
+      rounded corners=3pt, thick, align=center, inner sep=3pt,
+      text width=2.7cm, minimum height=2.8cm, font=\footnotesize
+  },
+  inp/.style={block, fill=gray!12, draw=gray!55!black},
+  cnv/.style={block, fill=blue!9, draw=blue!45!black},
+  aux/.style={block, fill=orange!16, draw=orange!60!black},
+  fcnode/.style={block, fill=green!10, draw=green!45!black},
+  dimlbl/.style={font=\scriptsize\itshape, text=black!55},
+  grouplbl/.style={font=\scriptsize, text=black!50},
+]
+
+% ================= HÀNG 1: trích đặc trưng =================
+\node[inp] (in) at (0, 5.2) {
+  \textbf{Ảnh vào}\\[1pt]
+  48$\times$48\\
+  1 kênh xám\\[6pt]
+  \textcolor{black!45}{0 tham số}
+};
+
+\node[cnv] (b1) at (3.9, 5.2) {
+  \textbf{Khối 1}\\[1pt]
+  Conv $3{\times}3$\\
+  $1\to32$\\
+  BN + ReLU\\
+  MaxPool $2\times2$\\[4pt]
+  \textcolor{black!55}{288 + 64}
+};
+
+\node[cnv] (b2) at (7.8, 5.2) {
+  \textbf{Khối 2}\\[1pt]
+  Conv $3{\times}3$\\
+  $32\to64$\\
+  BN + ReLU\\
+  MaxPool $2\times2$\\[4pt]
+  \textcolor{black!55}{18.432 + 128}
+};
+
+\node[cnv] (b3) at (11.7, 5.2) {
+  \textbf{Khối 3}\\[1pt]
+  Conv $3{\times}3$\\
+  $64\to128$\\
+  BN + ReLU\\
+  MaxPool $2\times2$\\[4pt]
+  \textcolor{black!55}{73.728 + 256}
+};
+
+% ================= HÀNG 2: phân loại =================
+\node[aux] (gap) at (11.7, 0.9) {
+  \textbf{GAP}\\[1pt]
+  Trung bình\\
+  mỗi bản đồ\\[6pt]
+  \textcolor{black!55}{0 tham số}
+};
+
+\node[aux] (drop) at (7.8, 0.9) {
+  \textbf{Dropout}\\[1pt]
+  $p = 0{,}3$\\[6pt]
+  \textcolor{black!55}{0 tham số}
+};
+
+\node[fcnode] (fc) at (3.9, 0.9) {
+  \textbf{FC}\\[1pt]
+  Linear\\
+  $128\to7$\\[6pt]
+  \textcolor{black!55}{903}
+};
+
+\node[inp] (out) at (0, 0.9) {
+  \textbf{Đầu ra}\\[1pt]
+  7 lớp\\
+  softmax\\[6pt]
+  \textcolor{black!45}{vector 7 chiều}
+};
+
+% ================= MŨI TÊN =================
+\draw[arr] (in) -- (b1);
+\draw[arr] (b1) -- (b2);
+\draw[arr] (b2) -- (b3);
+
+% Mũi tên vòng từ khối 3 xuống GAP (đi vòng bên phải cho khỏi chồng chữ)
+\draw[arr] (b3.east) -- ++(1.15, 0) -- ++(0, -4.3) -- (gap.east);
+
+\draw[arr] (gap) -- (drop);
+\draw[arr] (drop) -- (fc);
+\draw[arr] (fc) -- (out);
+
+% ================= KÍCH THƯỚC TENSOR =================
+\node[dimlbl] at (3.9, 3.45) {24$\times$24$\times$32};
+\node[dimlbl] at (7.8, 3.45) {12$\times$12$\times$64};
+\node[dimlbl] at (11.7, 3.45) {6$\times$6$\times$128};
+\node[dimlbl] at (11.7, -0.85) {128};
+\node[dimlbl] at (7.8, -0.85) {128};
+\node[dimlbl] at (3.9, -0.85) {7};
+
+% ================= NHÓM CHỨC NĂNG =================
+\draw[dashed, draw=black!30, rounded corners=6pt]
+  ($(b1.north west)+(-0.3,0.3)$) rectangle ($(b3.south east)+(0.3,-0.62)$);
+\node[grouplbl] at (7.8, 7.15) {Trích đặc trưng (3 khối tích chập)};
+
+\draw[dashed, draw=black!30, rounded corners=6pt]
+  ($(gap.north east)+(0.3,0.3)$) rectangle ($(fc.south west)+(-0.3,-0.62)$);
+\node[grouplbl] at (7.8, -1.45) {Phân loại};
+
+% ================= TỔNG THAM SỐ =================
+\node[font=\footnotesize, text=black!65] at (7.8, -2.05) {Tổng cộng 93.799 tham số};
+
+\end{tikzpicture}
+
+\end{document}
