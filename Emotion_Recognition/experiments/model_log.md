@@ -1,8 +1,7 @@
 # Nhật ký thí nghiệm — CNN nhận dạng biểu cảm (FER2013)
 
-File này ghi lại từng lần chạy: dùng cấu hình gì, ra kết quả bao nhiêu, nhận xét và quyết định
-tiếp theo. Số liệu thô (mọi cột) nằm trong `runs.csv`, còn lịch sử loss/accuracy từng epoch nằm
-trong `logs/<exp_id>_history.csv`.
+File này ghi lại từng lần chạy: cấu hình gì, kết quả bao nhiêu, nhận xét và quyết định tiếp theo.
+Số liệu thô nằm trong `runs.csv`, lịch sử loss/accuracy từng epoch nằm trong `logs/<exp_id>_history.csv`.
 
 ## Thiết lập chung
 
@@ -12,27 +11,57 @@ trong `logs/<exp_id>_history.csv`.
 | Chia tập | stratified 90/10 trên train → 25.838 train / 2.871 validation |
 | Seed | 42 (Python, numpy, torch) |
 | Chuẩn hoá | trừ mean 0,5077, chia std 0,2551 (tính trên train) |
-| Đánh giá | accuracy trên validation để chọn epoch; test chỉ dùng một lần |
-| Metric phụ | F1 từng lớp, vì dữ liệu mất cân bằng 16,5 lần |
+| Ngân sách mỗi cấu hình | 18 epoch, early stopping sau 6 epoch không cải thiện |
+| Chọn mô hình | validation accuracy; **test chỉ dùng một lần** ở giai đoạn 4 |
+| Metric phụ | F1 từng lớp (dữ liệu mất cân bằng 16,5 lần) |
 
-Quy ước mã thí nghiệm: `BASE` là baseline, các nhóm sau đánh số theo biến khảo sát
-(`A2/A3/A4` = số khối conv, `B1/B2/B3` = độ rộng, `C1..C4` = optimizer và tốc độ học,
-`D1..D4` = chống quá khớp).
+Quy ước mã: `BASE` là baseline; `A2/A4` = số khối conv; `B1/B3` = độ rộng; `C1..C3` = optimizer
+và tốc độ học; `D1..D4` = chống quá khớp và xử lý mất cân bằng.
 
-## Bảng thí nghiệm
+## Bảng thí nghiệm (giai đoạn 2–3)
 
-| exp_id | Mô hình | Siêu tham số chính | Val acc | Test acc | Nhận xét | Quyết định |
-|---|---|---|---|---|---|---|
-| BASE | CNN 3 khối 32-64-128, GAP, dropout 0,3 (93.799 tham số) | Adam 1e-3, batch 64, 18 epoch, không augmentation | 0,5385 (epoch 15) | **0,5237** | Loss train vẫn giảm đến epoch cuối, khoảng cách train–val chỉ 2 điểm % → **chưa quá khớp mà còn thiếu năng lực/thiếu epoch**. Lớp `disgust` có recall = 0, `fear` 0,23, `sad` 0,34 → mô hình nghiêng hẳn về lớp đa số. | Lấy làm mốc so sánh. Giai đoạn sau thử tăng độ sâu/rộng (A, B), đổi optimizer (C), thêm augmentation và class weight (D). |
+| exp_id | Mô hình | Thay đổi so với baseline | Val acc | Test acc | Gap train–val | Thời gian | Nhận xét | Quyết định |
+|---|---|---|---:|---:|---:|---:|---|---|
+| BASE | 32-64-128, dropout 0,3, Adam 1e-3 | — | 0,5385 | 0,5237 | +0,022 | 628 s | Chưa quá khớp, còn thiếu năng lực; `disgust` recall = 0 | Lấy làm mốc so sánh |
+| A2 | 32-64 | 2 khối conv | 0,3299 | — | −0,002 | 496 s | Train 0,328 ≈ val 0,330 → **không học được gì**, thiếu năng lực nghiêm trọng (2 lần pool còn 12×12, GAP nén quá mạnh) | Loại, không dùng mạng quá nông |
+| A4 | 32-64-128-256 | 4 khối conv | **0,5890** | — | +0,324 | 708 s | Cao nhất nhưng **quá khớp nặng** (train 0,908) | Chọn làm hướng cho mô hình cuối, kèm regularization |
+| B1 | 16-32-64 | mạng hẹp | 0,4800 | — | −0,001 | 258 s | Train 0,473 ≈ val 0,480 → thiếu tham số, underfit | Loại |
+| B3 | 64-128-256 | mạng rộng | 0,5730 | — | +0,062 | 1531 s | +3,5 điểm nhưng tốn 2,4 lần thời gian của A4 | Không chọn: hiệu quả/giây thấp hơn A4 |
+| C1 | 32-64-128, SGD 0,9 | đổi optimizer | 0,5312 | — | −0,006 | 627 s | Chưa hội tụ (epoch tốt nhất 18/18) | Giữ Adam |
+| C2 | 32-64-128, AdamW | đổi optimizer | 0,5374 | — | +0,020 | 625 s | Gần như trùng Adam (0,5385) | Weight decay không có ích ở quy mô này |
+| C3 | 32-64-128, Adam 1e-4 | giảm lr | 0,4330 | — | −0,006 | 678 s | Quá chậm, 18 epoch chưa đi được bao xa | Loại |
+| D1 | 32-64-128 + augmentation | thêm augmentation | 0,5110 | — | −0,010 | 567 s | Gap ≈ 0 → chặn quá khớp tốt, nhưng underfit vì thiếu epoch | Sẽ dùng cho mô hình cuối với nhiều epoch hơn |
+| D2 | 32-64-128, dropout 0,5 | tăng dropout | 0,5190 | — | +0,029 | 556 s | Giảm nhẹ accuracy, gap không nhỏ hơn baseline | Không chọn |
+| D3 | 32-64-128 + class weight | cân bằng lớp | 0,4977 | — | +0,007 | 552 s | Accuracy giảm 4,1 điểm; cần xem F1 mới kết luận được | Thử lại ở mô hình cuối, đánh giá bằng F1 |
+| D4 | 32-64-128, aug + class weight | kết hợp | 0,4932 | — | −0,001 | 554 s | Thấp nhất nhóm D, epoch tốt nhất rơi vào 14 | Loại |
+
+Tổng thời gian chạy 12 cấu hình: khoảng 2 giờ 10 phút (CPU, 16 luồng).
 
 ## Ghi chú theo từng giai đoạn
 
 ### Giai đoạn 2 — baseline
 
-- Thử 12 epoch trước: test 46,99%, loss vẫn giảm ở epoch cuối → kết luận là **cắt ngang quá
-  sớm**, không phải quá khớp. Tăng lên 18 epoch được 52,37%.
-- Validation loss dao động khá mạnh giữa các epoch (1,24 → 1,35 → 1,24), nguyên nhân là validation
-  chỉ có 2.871 ảnh nên mỗi lần đổi epoch là đổi một mẫu ước lượng khá nhiễu.
-- Early stopping chưa kích hoạt vì val accuracy vẫn còn tăng.
-- F1 macro chỉ 0,428 trong khi accuracy 0,524 — chênh lệch này chính là hệ quả của mất cân bằng,
-  và là lý do phải báo cáo thêm F1 chứ không chỉ accuracy.
+- Thử 12 epoch trước: test 46,99%, loss vẫn giảm ở epoch cuối → cắt ngang quá sớm chứ không phải
+  quá khớp. Tăng lên 18 epoch được 52,37%.
+- Validation loss dao động mạnh giữa các epoch vì validation chỉ có 2.871 ảnh.
+- F1 macro 0,428 so với accuracy 0,524 — hệ quả trực tiếp của mất cân bằng lớp.
+- Chạy lại lần hai cho đúng kết quả (val 0,5385 / test 0,5237), chỉ khác thời gian → pipeline
+  tái lập được.
+
+### Giai đoạn 3 — 11 cấu hình
+
+- **Dung lượng mô hình là biến quan trọng nhất**: A4 +5,0 điểm, A2 −20,9 điểm, B3 +3,5 điểm.
+- **Optimizer gần như không ảnh hưởng**: Adam 0,5385 / AdamW 0,5374 / SGD 0,5312; chỉ có lr quá
+  nhỏ (1e-4) mới làm hỏng (0,4330).
+- **Regularization giảm accuracy trong ngân sách 18 epoch**, nhưng A4 gap +0,324 chứng tỏ nó cần
+  regularization. Hai kết luận này không mâu thuẫn: regularization cần thời gian để phát huy.
+- **Class weight làm accuracy giảm** (0,4977) — chưa kết luận được vì chưa đo F1 từng lớp trong
+  thí nghiệm này; sẽ đo ở giai đoạn 4.
+
+### Quyết định cho giai đoạn 4
+
+1. Mô hình cuối: **A4 (32-64-128-256) + augmentation**, huấn luyện ~40 epoch (thay vì 18) vì
+   augmentation làm chậm hội tụ nhưng hãm được mức quá khớp rất lớn của A4.
+2. Chạy 3 seed (42/43/44) để báo trung bình ± độ lệch chuẩn, tránh kết luận trên một lần chạy.
+3. Đánh giá cuối bằng **accuracy + F1 từng lớp + confusion matrix**, và thử thêm biến thể có
+   class weight để trả lời câu hỏi còn bỏ ngỏ ở D3.

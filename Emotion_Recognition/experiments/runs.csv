@@ -1,2 +1,13 @@
 exp_id,mo_hinh,do_dropout,optimizer,lr,batch,augment,epochs_chay,epoch_tot_nhat,val_acc,test_acc,giay,ghi_chu
-BASE,CNN 32-64-128,0.3,Adam,0.001,64,False,18,15,0.5385,0.5237,656.0,"baseline, không augmentation"
+BASE,CNN 32-64-128,0.3,Adam,0.001,64,False,18,15,0.5385,0.5237,628.5,"baseline, không augmentation"
+A2,CNN 32-64,0.3,Adam,0.001,64,False,18,18,0.3299,,495.9,2 khối conv
+A4,CNN 32-64-128-256,0.3,Adam,0.001,64,False,18,17,0.589,,708.4,4 khối conv
+B1,CNN 16-32-64,0.3,Adam,0.001,64,False,18,17,0.48,,258.1,mạng hẹp 16-32-64
+B3,CNN 64-128-256,0.3,Adam,0.001,64,False,18,15,0.573,,1531.0,mạng rộng 64-128-256
+C1,CNN 32-64-128,0.3,SGD,0.01,64,False,18,18,0.5312,,627.3,SGD momentum 0.9
+C2,CNN 32-64-128,0.3,AdamW,0.001,64,False,18,18,0.5374,,624.8,AdamW
+C3,CNN 32-64-128,0.3,Adam,0.0001,64,False,18,18,0.433,,678.1,Adam lr 1e-4
+D1,CNN 32-64-128,0.3,Adam,0.001,64,True,18,17,0.511,,566.5,có augmentation
+D2,CNN 32-64-128,0.5,Adam,0.001,64,False,18,18,0.519,,555.5,dropout 0.5
+D3,CNN 32-64-128,0.3,Adam,0.001,64,False,18,18,0.4977,,552.0,class weight
+D4,CNN 32-64-128,0.3,Adam,0.001,64,True,18,14,0.4932,,553.9,augmentation + class weight
