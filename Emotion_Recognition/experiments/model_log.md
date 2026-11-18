@@ -65,3 +65,35 @@ Tổng thời gian chạy 12 cấu hình: khoảng 2 giờ 10 phút (CPU, 16 lu�
 2. Chạy 3 seed (42/43/44) để báo trung bình ± độ lệch chuẩn, tránh kết luận trên một lần chạy.
 3. Đánh giá cuối bằng **accuracy + F1 từng lớp + confusion matrix**, và thử thêm biến thể có
    class weight để trả lời câu hỏi còn bỏ ngỏ ở D3.
+
+### Giai đoạn 4 — mô hình cuối (A4 + augmentation, 40 epoch)
+
+| ten | seed | class weight | Epoch tốt nhất | Val acc | Val macro F1 | Thời gian |
+|---|---|---:|---:|---:|---:|---:|
+| F42 | 42 | không | 36 / 40 | 0,6555 | 0,6087 | 1633 s |
+| F43 | 43 | không | 29 / 37 | 0,6444 | 0,5961 | 1662 s |
+| F44 | 44 | không | 37 / 40 | 0,6576 | 0,6138 | 1678 s |
+| F42_cw | 42 | **có** | 39 / 40 | 0,6371 | 0,5869 | 1660 s |
+
+- Trung bình 3 seed: **val accuracy 0,6525 ± 0,0071**, **macro F1 0,6062 ± 0,0091**.
+- Khoảng cách train–validation của F44 chỉ còn **0,018** (train 0,675 / val 0,657), so với
+  **0,324** của A4 ở 18 epoch → augmentation + ngân sách epoch dài đã hãm quá khớp đúng cách.
+- **Class weight không có lợi**: F42_cw thấp hơn F42 ở cả accuracy (−1,8 điểm) lẫn macro F1
+  (−2,2 điểm). Khi mô hình đã đủ năng lực và có augmentation, lớp hiếm tự học được.
+
+Kết quả test của F44 (seed tốt nhất theo validation, chạy một lần):
+
+| | Baseline | Mô hình cuối | Chênh |
+|---|---:|---:|---:|
+| Test accuracy | 0,5237 | **0,6503** | +12,7 điểm |
+| Test macro F1 | 0,4278 | **0,6237** | +19,6 điểm |
+| Recall Ghê tởm | 0,00 | **0,53** | +0,53 |
+| Recall Sợ hãi | 0,23 | 0,38 | +0,15 |
+
+Năm cặp nhầm nhiều nhất: Sợ hãi→Buồn 23,3%; Ghê tởm→Giận 18,9%; Bình thường→Buồn 17,8%;
+Buồn→Bình thường 17,2%; Giận→Buồn 16,7%. Lớp `Buồn` xuất hiện trong 4/5 cặp — nó đóng vai trò
+"lớp hút" khi mô hình phân vân.
+
+Kết luận chung: yếu tố cải thiện lớn nhất là **ngân sách huấn luyện + augmentation**
+(0,589 → 0,6525 val), sau đó là **dung lượng mô hình**; optimizer gần như không ảnh hưởng, còn
+class weight và dropout lớn đều làm giảm chất lượng.

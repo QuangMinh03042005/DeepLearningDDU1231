@@ -1,0 +1,5 @@
+seed,ten,class_weight,epochs_chay,epoch_tot_nhat,val_acc,val_f1,giay
+42,F42,False,40,36,0.6555,0.6087,1633.3
+43,F43,False,37,29,0.6444,0.5961,1662.4
+44,F44,False,40,37,0.6576,0.6138,1677.7
+42,F42_cw,True,40,39,0.6371,0.5869,1659.5

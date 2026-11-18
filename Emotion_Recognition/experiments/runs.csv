@@ -1,5 +1,5 @@
 exp_id,mo_hinh,do_dropout,optimizer,lr,batch,augment,epochs_chay,epoch_tot_nhat,val_acc,test_acc,giay,ghi_chu
-BASE,CNN 32-64-128,0.3,Adam,0.001,64,False,18,15,0.5385,0.5237,628.5,"baseline, không augmentation"
+BASE,CNN 32-64-128,0.3,Adam,0.001,64,False,18,15,0.5385,0.5237,598.7,"baseline, không augmentation"
 A2,CNN 32-64,0.3,Adam,0.001,64,False,18,18,0.3299,,495.9,2 khối conv
 A4,CNN 32-64-128-256,0.3,Adam,0.001,64,False,18,17,0.589,,708.4,4 khối conv
 B1,CNN 16-32-64,0.3,Adam,0.001,64,False,18,17,0.48,,258.1,mạng hẹp 16-32-64
